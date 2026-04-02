@@ -3,10 +3,11 @@ use serde::{Serialize, Deserialize};
 use crate::models::agent::{AgentData, AgentResponse};
 use crate::models::waypoints::{WaypointData, WaypointResponse};
 use crate::models::contract::{ContractData, ContractResponse};
+use anyhow::Result;
 
 use crate::{HOST_URL, ACCOUNT_TOKEN};
 
-pub fn get_contract_data(client: &Client, agent_data: &AgentData) -> Result<Vec<ContractData>, Box<dyn std::error::Error>> {
+pub fn get_contract_data(client: &Client, agent_data: &AgentData) -> Result<Vec<ContractData>> {
 
     let path = format!("my/contracts");
     let url = format!("{}/{}", HOST_URL, path);
@@ -19,7 +20,7 @@ pub fn get_contract_data(client: &Client, agent_data: &AgentData) -> Result<Vec<
     Ok(response.data)
 }
 
-pub fn get_starting_waypoint(client: &Client, agent_data: &AgentData) ->Result<WaypointData, Box<dyn std::error::Error>> {
+pub fn get_starting_waypoint(client: &Client, agent_data: &AgentData) ->Result<WaypointData> {
 
     let system_symbol = &agent_data.headquarters[0..7];
 
@@ -34,7 +35,7 @@ pub fn get_starting_waypoint(client: &Client, agent_data: &AgentData) ->Result<W
     Ok(response.data)
 }
 
-pub fn get_my_agent(client: &Client) -> Result<AgentData, Box<dyn std::error::Error>> {
+pub fn get_my_agent(client: &Client) -> Result<AgentData> {
 
     let path: &str = "my/agent";
     let url  =  format!("{}/{}", HOST_URL, path);
