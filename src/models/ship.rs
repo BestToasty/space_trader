@@ -1,3 +1,4 @@
+use crate::models::common::Meta;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
@@ -177,11 +178,4 @@ pub struct InventoryItem {
     pub name: String,
     pub description: String,
     pub units: i32,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Meta {
-    pub total: i32,
-    pub page: i32,
-    pub limit: i32,
 }

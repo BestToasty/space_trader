@@ -1,17 +1,11 @@
+use crate::models::common::Meta;
 use chrono::{DateTime, Utc};
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ContractResponse {
     pub data: Vec<ContractData>,
     pub meta: Meta,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Meta {
-    pub total: i32,
-    pub page: i32,
-    pub limit: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

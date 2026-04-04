@@ -1,17 +1,17 @@
-use crate::models::agent::{AgentData, AgentResponse};
-use crate::models::contract::{ContractData, ContractResponse};
-use crate::models::ship::{ShipData, ShipReactor, ShipResponse};
-use crate::models::waypoints::{WaypointData, WaypointResponse};
+use crate::models::*;
+use crate::{
+    ACCOUNT_TOKEN, AGENT_CACHE_FILE, CACHE_DIR, CONTRACT_CACHE_FILE, HOST_URL, SHIPS_CACHE_FILE,
+};
 use anyhow::Result;
 use reqwest::blocking::Client;
-
-use crate::{ACCOUNT_TOKEN, HOST_URL};
+use std::fs;
 
 pub struct SpaceTradersClient {
     client: Client,
     token: String,
     pub agent: Option<AgentData>,
     pub ships: Option<Vec<ShipData>>,
+    pub contracts: Option<Vec<ContractData>>,
 }
 
 impl SpaceTradersClient {
@@ -21,7 +21,84 @@ impl SpaceTradersClient {
             token: ACCOUNT_TOKEN.to_string(),
             agent: None,
             ships: None,
+            contracts: None,
         }
+    }
+
+    pub fn init(&mut self) -> anyhow::Result<()> {
+        let agent_data = self.fetch_agent_from_api()?;
+        let ships_data = self.fetch_ship_data_from_api()?;
+        let contract_data = self.fetch_contract_data()?;
+
+        self.agent = Some(agent_data);
+        self.ships = Some(ships_data);
+        self.contracts = Some(contract_data);
+
+        self.cache_agent()?;
+        self.cache_ships()?;
+        self.cache_contracts()?;
+
+        Ok(())
+    }
+
+    pub fn load_contracts_from_cache(&mut self) -> anyhow::Result<()> {
+        let path = format!("{}/{}", CACHE_DIR, CONTRACT_CACHE_FILE);
+
+        let json = fs::read_to_string(path)?;
+        self.contracts = Some(serde_json::from_str(&json)?);
+        Ok(())
+    }
+
+    pub fn load_ships_from_cache(&mut self) -> anyhow::Result<()> {
+        let path = format!("{}/{}", CACHE_DIR, SHIPS_CACHE_FILE);
+
+        let json = fs::read_to_string(path)?;
+        self.ships = Some(serde_json::from_str(&json)?);
+        Ok(())
+    }
+
+    pub fn load_agent_from_cache(&mut self) -> anyhow::Result<()> {
+        let path = format!("{}/{}", CACHE_DIR, AGENT_CACHE_FILE);
+
+        let json = fs::read_to_string(path)?;
+        self.agent = Some(serde_json::from_str(&json)?);
+        Ok(())
+    }
+
+    pub fn cache_contracts(&self) -> anyhow::Result<()> {
+        fs::create_dir_all("cache")?;
+
+        if let Some(ref a) = self.contracts {
+            let json = serde_json::to_string_pretty(a)?;
+            let path = "cache/contract_cache.json";
+
+            fs::write(path, json)?;
+        }
+        Ok(())
+    }
+
+    pub fn cache_agent(&self) -> anyhow::Result<()> {
+        fs::create_dir_all("cache")?;
+
+        if let Some(ref a) = self.agent {
+            let json = serde_json::to_string_pretty(a)?;
+            let path = "cache/agent_cache.json";
+
+            fs::write(path, json)?;
+        }
+        Ok(())
+    }
+
+    pub fn cache_ships(&self) -> anyhow::Result<()> {
+        fs::create_dir_all("cache")?;
+
+        if let Some(ref a) = self.ships {
+            let json = serde_json::to_string_pretty(a)?;
+            let path = "cache/ships_cache.json";
+
+            fs::write(path, json)?;
+        }
+        Ok(())
     }
 
     pub fn print_raw(&self) -> anyhow::Result<()> {
@@ -82,7 +159,7 @@ impl SpaceTradersClient {
         }
     }
 
-    pub fn get_contract_data(&self) -> Result<Vec<ContractData>> {
+    pub fn fetch_contract_data(&self) -> Result<Vec<ContractData>> {
         let path = format!("my/contracts");
         let url = format!("{}/{}", HOST_URL, path);
 
