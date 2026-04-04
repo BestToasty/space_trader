@@ -41,11 +41,33 @@ impl SpaceTradersClient {
         Ok(())
     }
 
+    pub fn load_state(&self) -> LocalState {
+        fs::read_to_string("state.json")
+            .and_then(|data| Ok(serde_json::from_str(&data)?))
+            .unwrap_or_default()
+    }
+
+    pub fn save_state(&self, state: &LocalState) -> Result<()> {
+        let path = "cache/state.json";
+        let data = serde_json::to_string_pretty(state)?;
+        fs::write(path, data)?;
+        Ok(())
+    }
+
+    pub fn load_all_cache(&mut self) -> anyhow::Result<()> {
+        self.load_agent_from_cache()?;
+        self.load_contracts_from_cache()?;
+        self.load_ships_from_cache()?;
+        Ok(())
+    }
+
     pub fn load_contracts_from_cache(&mut self) -> anyhow::Result<()> {
         let path = format!("{}/{}", CACHE_DIR, CONTRACT_CACHE_FILE);
 
         let json = fs::read_to_string(path)?;
         self.contracts = Some(serde_json::from_str(&json)?);
+
+        self.update_state_contract_id()?;
         Ok(())
     }
 
@@ -54,6 +76,8 @@ impl SpaceTradersClient {
 
         let json = fs::read_to_string(path)?;
         self.ships = Some(serde_json::from_str(&json)?);
+
+        self.update_last_ship_symbol()?;
         Ok(())
     }
 
@@ -65,7 +89,7 @@ impl SpaceTradersClient {
         Ok(())
     }
 
-    pub fn cache_contracts(&self) -> anyhow::Result<()> {
+    pub fn cache_contracts(&mut self) -> anyhow::Result<()> {
         fs::create_dir_all("cache")?;
 
         if let Some(ref a) = self.contracts {
@@ -74,6 +98,8 @@ impl SpaceTradersClient {
 
             fs::write(path, json)?;
         }
+
+        self.update_state_contract_id()?;
         Ok(())
     }
 
@@ -89,7 +115,7 @@ impl SpaceTradersClient {
         Ok(())
     }
 
-    pub fn cache_ships(&self) -> anyhow::Result<()> {
+    pub fn cache_ships(&mut self) -> anyhow::Result<()> {
         fs::create_dir_all("cache")?;
 
         if let Some(ref a) = self.ships {
@@ -98,6 +124,8 @@ impl SpaceTradersClient {
 
             fs::write(path, json)?;
         }
+
+        self.update_last_ship_symbol()?;
         Ok(())
     }
 
@@ -118,6 +146,25 @@ impl SpaceTradersClient {
         Ok(())
     }
 
+    pub fn accept_contract(&self, contract_id: i32) -> Result<()> {
+        let path = format!("my/contracts/{}/accept", contract_id);
+        let url = format!("{}/{}", HOST_URL, path);
+
+        let response = self
+            .client
+            .post(url)
+            .header("Authorization", format!("Bearer {}", self.token))
+            .send()?;
+        if response.status().is_success() {
+            Ok(())
+        } else {
+            anyhow::bail!(
+                "[!] Fehler beim Akzeptieren des Vertrages. {}",
+                response.status()
+            )
+        }
+    }
+
     pub fn request_new_contract(&self, ship_symbol: &str) -> Result<()> {
         let path = format!("my/ships/{}/negotiate/contract", ship_symbol);
         let url = format!("{}/{}", HOST_URL, path);
@@ -132,34 +179,13 @@ impl SpaceTradersClient {
             Ok(())
         } else {
             anyhow::bail!(
-                "Fehler beim Anfordern eines neuen Vetrages: {}",
+                "[!] Fehler beim Anfordern eines neuen Vetrages: {}",
                 response.status()
             )
         }
     }
 
-    pub fn accept_contract(&self, contract_id: &i32) -> Result<()> {
-        let path = format!("my/contracts/{}/accept", contract_id);
-        let url = format!("{}/{}", HOST_URL, path);
-
-        let response = self
-            .client
-            .post(url)
-            .header("Authorization", format!("Bearer {}", self.token))
-            .send()?;
-
-        if response.status().is_success() {
-            println!("Auftrag erfolgreich angenommen.");
-            Ok(())
-        } else {
-            anyhow::bail!(
-                "Fehler beim Akzeptieren des Vetrages: {}",
-                response.status()
-            )
-        }
-    }
-
-    pub fn fetch_contract_data(&self) -> Result<Vec<ContractData>> {
+    pub fn fetch_contract_data(&mut self) -> Result<Vec<ContractData>> {
         let path = format!("my/contracts");
         let url = format!("{}/{}", HOST_URL, path);
 
@@ -169,6 +195,14 @@ impl SpaceTradersClient {
             .header("Authorization", format!("Bearer {}", self.token))
             .send()?
             .json::<ContractResponse>()?;
+
+        let mut state: LocalState = self.load_state();
+
+        if let Some(first) = response.data.first() {
+            state.last_contract_id = Some(first.id.clone());
+            self.save_state(&state)?;
+            self.update_state(StateUpdate::LastContractId(first.id.clone()))?;
+        }
 
         Ok(response.data)
     }
@@ -186,6 +220,10 @@ impl SpaceTradersClient {
             .header("Authorization", format!("Bearer {}", self.token))
             .send()?
             .json::<WaypointResponse>()?;
+
+        self.update_state(StateUpdate::LastWaypointSymbol(
+            response.data.symbol.clone(),
+        ))?;
 
         Ok(response.data)
     }
@@ -235,6 +273,50 @@ impl SpaceTradersClient {
             .send()?
             .json::<ShipResponse>()?;
 
+        if let Some(first) = response.data.first() {
+            self.update_state(StateUpdate::LastShipSymbol(first.symbol.clone()))?;
+        }
+
         Ok(response.data)
+    }
+
+    pub fn update_last_ship_symbol(&mut self) -> Result<()> {
+        if let Some(first) = self.ships.as_ref().and_then(|c| c.first()) {
+            self.update_state(StateUpdate::LastShipSymbol(first.symbol.clone()))?;
+        }
+        Ok(())
+    }
+
+    pub fn update_state_contract_id(&mut self) -> Result<()> {
+        if let Some(first) = self.contracts.as_ref().and_then(|c| c.first()) {
+            self.update_state(StateUpdate::LastContractId(first.id.clone()))?;
+        }
+        Ok(())
+    }
+
+    pub fn update_state_waypoint_symbol(&mut self, symbol: String) -> Result<()> {
+        self.update_state(StateUpdate::LastWaypointSymbol(symbol))?;
+        Ok(())
+    }
+
+    pub fn update_state(&mut self, update: StateUpdate) -> Result<()> {
+        let mut state: LocalState = self.load_state();
+
+        match update {
+            StateUpdate::LastContractId(id) => {
+                state.last_contract_id = Some(id);
+                self.save_state(&state)?;
+            }
+            StateUpdate::LastShipSymbol(symbol) => {
+                state.last_ship_symbol = Some(symbol);
+                self.save_state(&state)?;
+            }
+            StateUpdate::LastWaypointSymbol(symbol) => {
+                state.last_waypoint_symbol = Some(symbol);
+                self.save_state(&state)?;
+            }
+        }
+
+        Ok(())
     }
 }

@@ -11,4 +11,8 @@ pub struct Cli {
 pub enum Commands {
     Init,
     Status,
+    RequestNewContract { ship_symbol: Option<String> },
+    GetShipSymbol { ship_number: Option<String> },
+    AcceptContract { contract_id: Option<i32> },
+    GetContractId { contract_number: Option<usize> },
 }

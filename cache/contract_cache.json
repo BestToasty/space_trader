@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": "cmnkp005291ecuo6ykfeqauvx",
+    "factionSymbol": "AEGIS",
+    "type": "PROCUREMENT",
+    "terms": {
+      "deadline": "2026-04-11T18:55:17.937Z",
+      "payment": {
+        "onAccepted": 1188,
+        "onFulfilled": 3564
+      },
+      "deliver": [
+        {
+          "tradeSymbol": "LIQUID_NITROGEN",
+          "destinationSymbol": "X1-FC66-E46",
+          "unitsRequired": 72,
+          "unitsFulfilled": 0
+        }
+      ]
+    },
+    "accepted": false,
+    "fulfilled": false,
+    "expiration": "2026-04-05T18:55:17.937Z",
+    "deadlineToAccept": "2026-04-05T18:55:17.937Z"
+  }
+]
