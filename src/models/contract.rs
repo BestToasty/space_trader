@@ -22,6 +22,16 @@ pub struct ContractData {
     pub deadline_to_accept: DateTime<Utc>,
 }
 
+impl ContractData {
+    pub fn accept_contract(&self) -> anyhow::Result<()> {
+        todo!()
+    }
+
+    pub fn from_cache(id: String) -> anyhow::Result<Self> {
+        todo!()
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct Terms {

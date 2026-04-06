@@ -41,6 +41,10 @@ impl SpaceTradersClient {
         Ok(())
     }
 
+    pub fn find_shipyard_near_waypoint(&self, symbol: String) -> Result<ShipCargo> {
+        todo!()
+    }
+
     pub fn load_state(&self) -> LocalState {
         fs::read_to_string("state.json")
             .and_then(|data| Ok(serde_json::from_str(&data)?))

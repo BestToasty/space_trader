@@ -1,4 +1,4 @@
-use crate::models::common::Meta;
+use super::common::*;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
@@ -14,13 +14,13 @@ pub struct ShipData {
     pub cargo: ShipCargo,
     pub cooldown: ShipCooldown,
     pub crew: ShipCrew,
-    pub engine: Option<ShipEngine>,
-    pub frame: ShipFrame,
+    pub engine: Engine,
+    pub frame: Frame,
     pub fuel: ShipFuel,
-    pub modules: Option<Vec<ShipModule>>,
-    pub mounts: Option<Vec<ShipMount>>,
+    pub modules: Vec<ShipModule>,
+    pub mounts: Vec<ShipMount>,
     pub nav: ShipNavigation,
-    pub reactor: Option<ShipReactor>,
+    pub reactor: Reactor,
     pub registration: ShipRegistration,
     pub symbol: String,
 }
@@ -30,35 +30,52 @@ pub struct ShipData {
 pub struct ShipRegistration {
     pub faction_symbol: String,
     pub name: String,
-    pub role: String,
+    pub role: Role,
 }
 
+#[allow(non_camel_case_types)]
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct ShipReactor {
-    pub condition: i32,
-    pub description: String,
-    pub integrity: i32,
-    pub name: String,
-    pub power_output: i32,
-    pub quality: i32,
-    pub requirements: ReactorRequirement,
-    pub symbol: String,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct ReactorRequirement {
-    pub crew: i32,
+pub enum Role {
+    FABRICATOR,
+    HARVESTER,
+    HAULER,
+    INTERCEPTOR,
+    EXCAVATOR,
+    TRANSPORT,
+    REPAIR,
+    SURVEYOR,
+    COMMAND,
+    CARRIER,
+    PATROL,
+    SATELLITE,
+    EXPLORER,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ShipNavigation {
-    pub flight_mode: String,
+    pub flight_mode: FlightMode,
     pub route: NavigationRoute,
-    pub status: String,
+    pub status: Status,
     pub system_symbol: String,
     pub waypoint_symbol: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Serialize, Deserialize, Debug)]
+pub enum Status {
+    IN_TRANSIT,
+    IN_ORBIT,
+    DOCKED,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Serialize, Deserialize, Debug)]
+pub enum FlightMode {
+    DRIFT,
+    STEALTH,
+    CRUISE,
+    BURN,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -87,7 +104,47 @@ pub struct ShipMount {
     pub name: String,
     pub requirements: Requirement,
     pub strength: Option<i32>,
-    pub symbol: String,
+    pub symbol: MountSymbol,
+    pub deposits: Option<Vec<MountDeposits>>,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Serialize, Deserialize, Debug)]
+pub enum MountDeposits {
+    QUARTZ_SAND,
+    SILICON_CRYSTALS,
+    PRECIOUS_STONES,
+    ICE_WATER,
+    AMMONIA_ICE,
+    IRON_ORE,
+    COPPER_ORE,
+    SILVER_ORE,
+    ALUMINUM_ORE,
+    GOLD_ORE,
+    PLATINUM_ORE,
+    DIAMONDS,
+    URANITE_ORE,
+    MERITIUM_ORE,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Serialize, Deserialize, Debug)]
+pub enum MountSymbol {
+    MOUNT_GAS_SIPHON_I,
+    MOUNT_GAS_SIPHON_II,
+    MOUNT_GAS_SIPHON_III,
+    MOUNT_SURVEYOR_I,
+    MOUNT_SURVEYOR_II,
+    MOUNT_SURVEYOR_III,
+    MOUNT_SENSOR_ARRAY_I,
+    MOUNT_SENSOR_ARRAY_II,
+    MOUNT_SENSOR_ARRAY_III,
+    MOUNT_MINING_LASER_I,
+    MOUNT_MINING_LASER_II,
+    MOUNT_MINING_LASER_III,
+    MOUNT_LASER_CANNON_I,
+    MOUNT_MISSILE_LAUNCHER_I,
+    MOUNT_TURRET_I,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -96,14 +153,39 @@ pub struct ShipModule {
     pub description: String,
     pub name: String,
     pub requirements: Requirement,
-    pub symbol: String,
+    pub symbol: ModuleSymbol,
     pub deposits: Option<Vec<String>>,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Serialize, Deserialize, Debug)]
+pub enum ModuleSymbol {
+    MODULE_MINERAL_PROCESSOR_I,
+    MODULE_GAS_PROCESSOR_I,
+    MODULE_CARGO_HOLD_I,
+    MODULE_CARGO_HOLD_II,
+    MODULE_CARGO_HOLD_III,
+    MODULE_CREW_QUARTERS_I,
+    MODULE_ENVOY_QUARTERS_I,
+    MODULE_PASSENGER_CABIN_I,
+    MODULE_MICRO_REFINERY_I,
+    MODULE_ORE_REFINERY_I,
+    MODULE_FUEL_REFINERY_I,
+    MODULE_SCIENCE_LAB_I,
+    MODULE_JUMP_DRIVE_I,
+    MODULE_JUMP_DRIVE_II,
+    MODULE_JUMP_DRIVE_III,
+    MODULE_WARP_DRIVE_I,
+    MODULE_WARP_DRIVE_II,
+    MODULE_WARP_DRIVE_III,
+    MODULE_SHIELD_GENERATOR_I,
+    MODULE_SHIELD_GENERATOR_II,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ShipFuel {
     pub capacity: i32,
-    pub consumed: FuelConsumed,
+    pub consumed: Option<FuelConsumed>,
     pub current: i32,
 }
 
@@ -115,44 +197,11 @@ pub struct FuelConsumed {
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct ShipFrame {
-    pub condition: i32,
-    pub description: String,
-    pub fuel_capacity: i32,
-    pub integrity: i32,
-    pub module_slots: i32,
-    pub mounting_points: i32,
-    pub name: String,
-    pub quality: i32,
-    pub requirements: Requirement,
-    pub symbol: String,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct ShipEngine {
-    pub condition: i32,
-    pub description: String,
-    pub integrity: i32,
-    pub name: String,
-    pub quality: i32,
-    pub requirements: Requirement,
-    pub speed: i32,
-    pub symbol: String,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Requirement {
-    pub crew: Option<i32>,
-    pub power: Option<i32>,
-    pub slots: Option<i32>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
 pub struct ShipCooldown {
     pub remaining_seconds: i32,
     pub ship_symbol: String,
     pub total_seconds: i32,
+    pub expiration: Option<DateTime<Utc>>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -161,8 +210,16 @@ pub struct ShipCrew {
     pub current: i32,
     pub morale: i32,
     pub required: i32,
-    pub rotation: String,
+    pub rotation: Rotation,
     pub wages: i32,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Serialize, Deserialize, Debug, Default)]
+pub enum Rotation {
+    #[default]
+    STRICT,
+    RELAXED,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
