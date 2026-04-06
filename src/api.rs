@@ -1,7 +1,5 @@
 use crate::models::*;
-use crate::{
-    ACCOUNT_TOKEN, AGENT_CACHE_FILE, CACHE_DIR, CONTRACT_CACHE_FILE, HOST_URL, SHIPS_CACHE_FILE,
-};
+use crate::{ACCOUNT_TOKEN, HOST_URL};
 use anyhow::Result;
 use reqwest::blocking::Client;
 use std::fs;
@@ -34,23 +32,19 @@ impl SpaceTradersClient {
         self.ships = Some(ships_data);
         self.contracts = Some(contract_data);
 
-        self.cache_agent()?;
-        self.cache_ships()?;
-        self.cache_contracts()?;
-
+        crate::cache::save_agent(self.agent.as_ref().unwrap())?;
+        crate::cache::save_ships(self.ships.as_ref().unwrap())?;
+        crate::cache::save_contracts(self.contracts.as_ref().unwrap())?;
         Ok(())
     }
 
-    pub fn find_shipyard_near_waypoint(&self, symbol: String) -> Result<ShipCargo> {
-        todo!()
-    }
-
+    // to be removed
     pub fn load_state(&self) -> LocalState {
         fs::read_to_string("state.json")
             .and_then(|data| Ok(serde_json::from_str(&data)?))
             .unwrap_or_default()
     }
-
+    // to be removed
     pub fn save_state(&self, state: &LocalState) -> Result<()> {
         let path = "cache/state.json";
         let data = serde_json::to_string_pretty(state)?;
@@ -58,99 +52,7 @@ impl SpaceTradersClient {
         Ok(())
     }
 
-    pub fn load_all_cache(&mut self) -> anyhow::Result<()> {
-        self.load_agent_from_cache()?;
-        self.load_contracts_from_cache()?;
-        self.load_ships_from_cache()?;
-        Ok(())
-    }
-
-    pub fn load_contracts_from_cache(&mut self) -> anyhow::Result<()> {
-        let path = format!("{}/{}", CACHE_DIR, CONTRACT_CACHE_FILE);
-
-        let json = fs::read_to_string(path)?;
-        self.contracts = Some(serde_json::from_str(&json)?);
-
-        self.update_state_contract_id()?;
-        Ok(())
-    }
-
-    pub fn load_ships_from_cache(&mut self) -> anyhow::Result<()> {
-        let path = format!("{}/{}", CACHE_DIR, SHIPS_CACHE_FILE);
-
-        let json = fs::read_to_string(path)?;
-        self.ships = Some(serde_json::from_str(&json)?);
-
-        self.update_last_ship_symbol()?;
-        Ok(())
-    }
-
-    pub fn load_agent_from_cache(&mut self) -> anyhow::Result<()> {
-        let path = format!("{}/{}", CACHE_DIR, AGENT_CACHE_FILE);
-
-        let json = fs::read_to_string(path)?;
-        self.agent = Some(serde_json::from_str(&json)?);
-        Ok(())
-    }
-
-    pub fn cache_contracts(&mut self) -> anyhow::Result<()> {
-        fs::create_dir_all("cache")?;
-
-        if let Some(ref a) = self.contracts {
-            let json = serde_json::to_string_pretty(a)?;
-            let path = "cache/contract_cache.json";
-
-            fs::write(path, json)?;
-        }
-
-        self.update_state_contract_id()?;
-        Ok(())
-    }
-
-    pub fn cache_agent(&self) -> anyhow::Result<()> {
-        fs::create_dir_all("cache")?;
-
-        if let Some(ref a) = self.agent {
-            let json = serde_json::to_string_pretty(a)?;
-            let path = "cache/agent_cache.json";
-
-            fs::write(path, json)?;
-        }
-        Ok(())
-    }
-
-    pub fn cache_ships(&mut self) -> anyhow::Result<()> {
-        fs::create_dir_all("cache")?;
-
-        if let Some(ref a) = self.ships {
-            let json = serde_json::to_string_pretty(a)?;
-            let path = "cache/ships_cache.json";
-
-            fs::write(path, json)?;
-        }
-
-        self.update_last_ship_symbol()?;
-        Ok(())
-    }
-
-    pub fn print_raw(&self) -> anyhow::Result<()> {
-        let path = format!("my/ships");
-        let url = format!("{}/{}", HOST_URL, path);
-
-        let response = self
-            .client
-            .get(url)
-            .header("Authorization", format!("Bearer {}", self.token))
-            .send()?;
-
-        let json: serde_json::Value = response.json()?;
-
-        println!("{:#?}", json);
-
-        Ok(())
-    }
-
-    pub fn accept_contract(&self, contract_id: String) -> Result<()> {
+    pub fn accept_contract(&self, contract_id: String) -> Result<ContractData> {
         let path = format!("my/contracts/{}/accept", contract_id);
         let url = format!("{}{}", HOST_URL, path);
 
@@ -160,7 +62,7 @@ impl SpaceTradersClient {
             .header("Authorization", format!("Bearer {}", self.token))
             .send()?;
         if response.status().is_success() {
-            Ok(())
+            Ok(response.json::<ContractData>()?)
         } else {
             anyhow::bail!(
                 "[!] Fehler beim Akzeptieren des Vertrages. {}",

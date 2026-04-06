@@ -4,6 +4,7 @@ use clap::Parser;
 use cli::{Cli, Commands};
 use space_trader::{api::SpaceTradersClient, models::LocalState};
 use std::io::{self, IsTerminal, Read};
+mod cli_utils;
 
 fn main() -> Result<()> {
     let args = Cli::parse();
@@ -51,20 +52,12 @@ fn accept_contract(client: SpaceTradersClient, contract_id: Option<String>) -> R
 }
 
 fn status(mut client: SpaceTradersClient) -> Result<(), anyhow::Error> {
-    client.load_agent_from_cache()?;
-
-    let agent = client
-        .agent
-        .as_ref()
-        .expect("[!] Agent konnte nicht aus dem Cache geladen werden.");
-
-    eprintln!("Symbol: {}, Credits: {}", agent.symbol, agent.credits);
+    //eprintln!("Symbol: {}, Credits: {}", agent.symbol, agent.credits);
 
     Ok(())
 }
 
 fn request_new_contract(mut client: SpaceTradersClient, ship_symbol: Option<&str>) -> Result<()> {
-    client.load_ships_from_cache()?;
     if let Some(ship_symbol) = ship_symbol {
         client.request_new_contract(ship_symbol)?;
     } else {
@@ -74,13 +67,11 @@ fn request_new_contract(mut client: SpaceTradersClient, ship_symbol: Option<&str
         }
     }
     client.fetch_contract_data()?;
-    client.cache_contracts()?;
+
     Ok(())
 }
 
 fn get_ship_symbol(mut client: SpaceTradersClient, ship_number: Option<String>) -> Result<()> {
-    client.load_ships_from_cache()?;
-
     if let Some(ship_number) = ship_number {
         let ships = client
             .ships
@@ -101,8 +92,6 @@ fn get_ship_symbol(mut client: SpaceTradersClient, ship_number: Option<String>) 
 }
 
 fn get_contract_id(mut client: SpaceTradersClient, contract_number: Option<usize>) -> Result<()> {
-    client.load_contracts_from_cache()?;
-
     if let Some(contract_number) = contract_number {
         let contracts = client
             .contracts

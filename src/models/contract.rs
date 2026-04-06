@@ -31,12 +31,10 @@ pub enum ContractType {
 }
 
 impl ContractData {
-    pub fn accept_contract(&self) -> anyhow::Result<()> {
-        todo!()
-    }
-
-    pub fn from_cache(id: String) -> anyhow::Result<Self> {
-        todo!()
+    pub fn accept_contract(&self, client: &crate::api::SpaceTradersClient) -> anyhow::Result<()> {
+        let contract = client.accept_contract(self.id.clone())?;
+        crate::cache::update_contract_in_cache(contract)?;
+        Ok(())
     }
 }
 
