@@ -14,12 +14,20 @@ pub struct ContractData {
     pub id: String,
     pub faction_symbol: String,
     #[serde(rename = "type")]
-    pub contract_type: String,
+    pub contract_type: ContractType,
     pub terms: Terms,
     pub accepted: bool,
     pub fulfilled: bool,
     pub expiration: DateTime<Utc>,
-    pub deadline_to_accept: DateTime<Utc>,
+    pub deadline_to_accept: Option<DateTime<Utc>>,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Serialize, Deserialize, Debug)]
+pub enum ContractType {
+    PROCUREMENT,
+    TRANSPORT,
+    SHUTTLE,
 }
 
 impl ContractData {
