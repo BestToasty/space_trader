@@ -9,7 +9,7 @@ pub struct ShipResponse {
     pub meta: Meta,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ShipData {
     pub cargo: ShipCargo,
     pub cooldown: ShipCooldown,
@@ -25,7 +25,7 @@ pub struct ShipData {
     pub symbol: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ShipRegistration {
     pub faction_symbol: String,
@@ -34,7 +34,7 @@ pub struct ShipRegistration {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Role {
     FABRICATOR,
     HARVESTER,
@@ -51,7 +51,7 @@ pub enum Role {
     EXPLORER,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ShipNavigation {
     pub flight_mode: FlightMode,
@@ -62,7 +62,7 @@ pub struct ShipNavigation {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Status {
     IN_TRANSIT,
     IN_ORBIT,
@@ -70,7 +70,7 @@ pub enum Status {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum FlightMode {
     DRIFT,
     STEALTH,
@@ -78,7 +78,7 @@ pub enum FlightMode {
     BURN,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct NavigationRoute {
     pub arrival: DateTime<Utc>,
@@ -87,7 +87,7 @@ pub struct NavigationRoute {
     pub origin: Waypoint,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Waypoint {
     pub symbol: String,
@@ -98,7 +98,7 @@ pub struct Waypoint {
     pub y: i32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ShipMount {
     pub description: String,
     pub name: String,
@@ -109,7 +109,7 @@ pub struct ShipMount {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum MountDeposits {
     QUARTZ_SAND,
     SILICON_CRYSTALS,
@@ -128,7 +128,7 @@ pub enum MountDeposits {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum MountSymbol {
     MOUNT_GAS_SIPHON_I,
     MOUNT_GAS_SIPHON_II,
@@ -147,7 +147,7 @@ pub enum MountSymbol {
     MOUNT_TURRET_I,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ShipModule {
     pub capacity: Option<i32>,
     pub description: String,
@@ -158,7 +158,7 @@ pub struct ShipModule {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum ModuleSymbol {
     MODULE_MINERAL_PROCESSOR_I,
     MODULE_GAS_PROCESSOR_I,
@@ -182,20 +182,20 @@ pub enum ModuleSymbol {
     MODULE_SHIELD_GENERATOR_II,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ShipFuel {
     pub capacity: i32,
     pub consumed: Option<FuelConsumed>,
     pub current: i32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FuelConsumed {
     pub amount: i32,
     pub timestamp: DateTime<Utc>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ShipCooldown {
     pub remaining_seconds: i32,
@@ -204,7 +204,7 @@ pub struct ShipCooldown {
     pub expiration: Option<DateTime<Utc>>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ShipCrew {
     pub capacity: i32,
     pub current: i32,
@@ -215,21 +215,21 @@ pub struct ShipCrew {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Serialize, Deserialize, Debug, Default)]
+#[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub enum Rotation {
     #[default]
     STRICT,
     RELAXED,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ShipCargo {
     pub capacity: i32,
     pub inventory: Vec<InventoryItem>,
     pub units: i32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InventoryItem {
     pub symbol: String,
     pub name: String,

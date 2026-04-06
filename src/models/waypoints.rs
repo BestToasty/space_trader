@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct WaypointData {
     pub symbol: String,
@@ -20,7 +20,7 @@ pub struct WaypointData {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum FactionSymbol {
     COSMIC,
     VOID,
@@ -30,7 +30,7 @@ pub enum FactionSymbol {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum WaypointType {
     PLANET,
     GAS_GIANT,
@@ -48,14 +48,14 @@ pub enum WaypointType {
     FUEL_STATION,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Modifier {
     pub symbol: String,
     pub name: String,
     pub description: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Chart {
     pub waypoint_symbol: String,
@@ -63,12 +63,12 @@ pub struct Chart {
     pub submitted_on: DateTime<Utc>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Faction {
     pub symbol: FactionSymbol,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct WaypointTraits {
     pub symbol: WaypointTraitSymbol,
     pub name: String,
@@ -76,7 +76,7 @@ pub struct WaypointTraits {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum WaypointTraitSymbol {
     UNCHARTED,
     UNDER_CONSTRUCTION,
@@ -149,12 +149,12 @@ pub enum WaypointTraitSymbol {
     STRIPPED,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Orbital {
     pub symbol: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct WaypointResponse {
     pub data: WaypointData,
 }

@@ -8,7 +8,7 @@ pub struct ContractResponse {
     pub meta: Meta,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ContractData {
     pub id: String,
@@ -23,7 +23,7 @@ pub struct ContractData {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum ContractType {
     PROCUREMENT,
     TRANSPORT,
@@ -38,7 +38,7 @@ impl ContractData {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Terms {
     pub deadline: DateTime<Utc>,
@@ -46,14 +46,14 @@ pub struct Terms {
     pub deliver: Vec<Deliver>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Payment {
     pub on_accepted: i32,
     pub on_fulfilled: i32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Deliver {
     pub trade_symbol: String,

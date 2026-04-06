@@ -2,7 +2,7 @@ use super::common::*;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Shipyard {
     symbol: String,
@@ -13,7 +13,7 @@ pub struct Shipyard {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum ShipType {
     SHIP_PROBE,
     SHIP_MINING_DRONE,
@@ -30,7 +30,7 @@ pub enum ShipType {
     SHIP_BULK_FREIGHTER,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Transactions {
     waypoint_symbol: String,
@@ -41,7 +41,7 @@ pub struct Transactions {
     timestamp: DateTime<Utc>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ShipyardShip {
     #[serde(rename = "type")]
@@ -56,7 +56,7 @@ pub struct ShipyardShip {
     engine: Engine,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Supply {
     SCARCE,
     LIMITED,
@@ -65,7 +65,7 @@ pub enum Supply {
     ABUNDANT,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Activity {
     WEAK,
     GROWING,

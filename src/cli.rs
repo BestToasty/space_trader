@@ -12,7 +12,7 @@ pub enum Commands {
     Init,
     Status,
     RequestNewContract { ship_symbol: Option<String> },
-    GetShipSymbol { ship_number: Option<String> },
+    GetShipSymbol { ship_number: Option<usize> },
     AcceptContract { contract_id: Option<String> },
     GetContractId { contract_number: Option<usize> },
 }

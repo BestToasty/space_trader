@@ -60,6 +60,44 @@ pub fn save_ships(ships: &Vec<ShipData>) -> anyhow::Result<()> {
     Ok(())
 }
 
+pub fn status() -> anyhow::Result<()> {
+    let agent = load_agent()?;
+    eprintln!("Symbol: {}, Credits: {}", agent.symbol, agent.credits);
+    Ok(())
+}
+
+pub fn get_ship_by_index(index: usize) -> anyhow::Result<ShipData> {
+    let ships = load_ships()?;
+    ships
+        .get(index)
+        .cloned()
+        .ok_or_else(|| anyhow::anyhow!("Index nicht gefunden"))
+}
+
+pub fn get_ship_by_symbol(symbol: &str) -> anyhow::Result<ShipData> {
+    let ships = load_ships()?;
+    ships
+        .into_iter()
+        .find(|c| c.symbol == symbol)
+        .ok_or_else(|| anyhow::anyhow!("Ship mit Symbol {} nicht im Cache gefunden", symbol))
+}
+
+pub fn get_contract_by_index(index: usize) -> anyhow::Result<ContractData> {
+    let contracts = load_contracts()?;
+    contracts
+        .get(index)
+        .cloned()
+        .ok_or_else(|| anyhow::anyhow!("Index nicht gefunden"))
+}
+
+pub fn get_contract_by_id(id: &str) -> anyhow::Result<ContractData> {
+    let contracts = load_contracts()?;
+    contracts
+        .into_iter()
+        .find(|c| c.id == id)
+        .ok_or_else(|| anyhow::anyhow!("Vertrag mit ID {} nicht im Cache gefunden", id))
+}
+
 pub fn update_contract_in_cache(updated: ContractData) -> anyhow::Result<()> {
     let mut contracts = load_contracts()?;
 

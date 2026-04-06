@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Meta {
     pub total: i32,
     pub page: i32,
@@ -8,7 +8,7 @@ pub struct Meta {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum FrameSymbol {
     FRAME_PROBE,
     FRAME_DRONE,
@@ -29,7 +29,7 @@ pub enum FrameSymbol {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum ReactorSymbol {
     REACTOR_SOLAR_I,
     REACTOR_FUSION_I,
@@ -39,7 +39,7 @@ pub enum ReactorSymbol {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum EngineSymbol {
     ENGINE_IMPULSE_DRIVE_I,
     ENGINE_ION_DRIVE_I,
@@ -47,7 +47,7 @@ pub enum EngineSymbol {
     ENGINE_HYPER_DRIVE_I,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Reactor {
     pub condition: i32,
@@ -60,14 +60,14 @@ pub struct Reactor {
     pub symbol: ReactorSymbol,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Requirement {
     pub crew: Option<i32>,
     pub power: Option<i32>,
     pub slots: Option<i32>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Engine {
     pub condition: i32,
     pub description: String,
@@ -79,7 +79,7 @@ pub struct Engine {
     pub symbol: EngineSymbol,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Frame {
     pub condition: i32,
