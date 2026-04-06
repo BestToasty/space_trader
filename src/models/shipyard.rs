@@ -34,6 +34,7 @@ pub enum ShipType {
 #[serde(rename_all = "camelCase")]
 pub struct Transactions {
     waypoint_symbol: String,
+    ship_symbol: String,
     ship_type: ShipType,
     price: i32,
     agent_symbol: String,
