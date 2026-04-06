@@ -7,7 +7,7 @@
     },
     "cooldown": {
       "remainingSeconds": 0,
-      "shipSymbol": "M0N3YL3ND3R-1",
+      "shipSymbol": "STERNHAUER-1",
       "totalSeconds": 0
     },
     "crew": {
@@ -52,7 +52,7 @@
       "capacity": 400,
       "consumed": {
         "amount": 0,
-        "timestamp": "2026-04-01T16:39:24.911Z"
+        "timestamp": "2026-04-06T00:08:11.688Z"
       },
       "current": 400
     },
@@ -167,26 +167,26 @@
     "nav": {
       "flightMode": "CRUISE",
       "route": {
-        "arrival": "2026-04-01T16:39:24.911Z",
-        "departureTime": "2026-04-01T16:39:24.911Z",
+        "arrival": "2026-04-06T00:08:11.688Z",
+        "departureTime": "2026-04-06T00:08:11.688Z",
         "destination": {
-          "symbol": "X1-FC66-A1",
-          "systemSymbol": "X1-FC66",
+          "symbol": "X1-VM20-A1",
+          "systemSymbol": "X1-VM20",
           "type": "PLANET",
-          "x": 10,
-          "y": 23
+          "x": -15,
+          "y": 20
         },
         "origin": {
-          "symbol": "X1-FC66-A1",
-          "systemSymbol": "X1-FC66",
+          "symbol": "X1-VM20-A1",
+          "systemSymbol": "X1-VM20",
           "type": "PLANET",
-          "x": 10,
-          "y": 23
+          "x": -15,
+          "y": 20
         }
       },
       "status": "DOCKED",
-      "systemSymbol": "X1-FC66",
-      "waypointSymbol": "X1-FC66-A1"
+      "systemSymbol": "X1-VM20",
+      "waypointSymbol": "X1-VM20-A1"
     },
     "reactor": {
       "condition": 1,
@@ -201,11 +201,11 @@
       "symbol": "REACTOR_FISSION_I"
     },
     "registration": {
-      "factionSymbol": "AEGIS",
-      "name": "M0N3YL3ND3R-1",
+      "factionSymbol": "OBSIDIAN",
+      "name": "STERNHAUER-1",
       "role": "COMMAND"
     },
-    "symbol": "M0N3YL3ND3R-1"
+    "symbol": "STERNHAUER-1"
   },
   {
     "cargo": {
@@ -215,7 +215,7 @@
     },
     "cooldown": {
       "remainingSeconds": 0,
-      "shipSymbol": "M0N3YL3ND3R-2",
+      "shipSymbol": "STERNHAUER-2",
       "totalSeconds": 0
     },
     "crew": {
@@ -260,7 +260,7 @@
       "capacity": 0,
       "consumed": {
         "amount": 0,
-        "timestamp": "2026-04-01T16:39:24.928Z"
+        "timestamp": "2026-04-06T00:08:11.698Z"
       },
       "current": 0
     },
@@ -269,26 +269,26 @@
     "nav": {
       "flightMode": "CRUISE",
       "route": {
-        "arrival": "2026-04-01T16:39:24.928Z",
-        "departureTime": "2026-04-01T16:39:24.928Z",
+        "arrival": "2026-04-06T00:08:11.698Z",
+        "departureTime": "2026-04-06T00:08:11.698Z",
         "destination": {
-          "symbol": "X1-FC66-H53",
-          "systemSymbol": "X1-FC66",
+          "symbol": "X1-VM20-H53",
+          "systemSymbol": "X1-VM20",
           "type": "MOON",
-          "x": -44,
-          "y": 5
+          "x": -41,
+          "y": -15
         },
         "origin": {
-          "symbol": "X1-FC66-H53",
-          "systemSymbol": "X1-FC66",
+          "symbol": "X1-VM20-H53",
+          "systemSymbol": "X1-VM20",
           "type": "MOON",
-          "x": -44,
-          "y": 5
+          "x": -41,
+          "y": -15
         }
       },
       "status": "DOCKED",
-      "systemSymbol": "X1-FC66",
-      "waypointSymbol": "X1-FC66-H53"
+      "systemSymbol": "X1-VM20",
+      "waypointSymbol": "X1-VM20-H53"
     },
     "reactor": {
       "condition": 1,
@@ -303,10 +303,10 @@
       "symbol": "REACTOR_SOLAR_I"
     },
     "registration": {
-      "factionSymbol": "AEGIS",
-      "name": "M0N3YL3ND3R-2",
+      "factionSymbol": "OBSIDIAN",
+      "name": "STERNHAUER-2",
       "role": "SATELLITE"
     },
-    "symbol": "M0N3YL3ND3R-2"
+    "symbol": "STERNHAUER-2"
   }
 ]

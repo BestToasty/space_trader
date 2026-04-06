@@ -146,9 +146,9 @@ impl SpaceTradersClient {
         Ok(())
     }
 
-    pub fn accept_contract(&self, contract_id: i32) -> Result<()> {
+    pub fn accept_contract(&self, contract_id: String) -> Result<()> {
         let path = format!("my/contracts/{}/accept", contract_id);
-        let url = format!("{}/{}", HOST_URL, path);
+        let url = format!("{}{}", HOST_URL, path);
 
         let response = self
             .client
@@ -167,7 +167,7 @@ impl SpaceTradersClient {
 
     pub fn request_new_contract(&self, ship_symbol: &str) -> Result<()> {
         let path = format!("my/ships/{}/negotiate/contract", ship_symbol);
-        let url = format!("{}/{}", HOST_URL, path);
+        let url = format!("{}{}", HOST_URL, path);
 
         let response = self
             .client

@@ -1,26 +1,26 @@
 [
   {
-    "id": "cmnkp005291ecuo6ykfeqauvx",
-    "factionSymbol": "AEGIS",
+    "id": "cmnmfm8ptbjsdui6zrt4x5bhw",
+    "factionSymbol": "OBSIDIAN",
     "type": "PROCUREMENT",
     "terms": {
-      "deadline": "2026-04-11T18:55:17.937Z",
+      "deadline": "2026-04-13T00:08:11.676Z",
       "payment": {
-        "onAccepted": 1188,
-        "onFulfilled": 3564
+        "onAccepted": 1594,
+        "onFulfilled": 10096
       },
       "deliver": [
         {
-          "tradeSymbol": "LIQUID_NITROGEN",
-          "destinationSymbol": "X1-FC66-E46",
-          "unitsRequired": 72,
+          "tradeSymbol": "ALUMINUM_ORE",
+          "destinationSymbol": "X1-VM20-H52",
+          "unitsRequired": 54,
           "unitsFulfilled": 0
         }
       ]
     },
-    "accepted": false,
+    "accepted": true,
     "fulfilled": false,
-    "expiration": "2026-04-05T18:55:17.937Z",
-    "deadlineToAccept": "2026-04-05T18:55:17.937Z"
+    "expiration": "2026-04-07T00:08:11.676Z",
+    "deadlineToAccept": "2026-04-07T00:08:11.676Z"
   }
 ]

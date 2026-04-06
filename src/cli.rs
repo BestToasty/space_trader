@@ -13,6 +13,6 @@ pub enum Commands {
     Status,
     RequestNewContract { ship_symbol: Option<String> },
     GetShipSymbol { ship_number: Option<String> },
-    AcceptContract { contract_id: Option<i32> },
+    AcceptContract { contract_id: Option<String> },
     GetContractId { contract_number: Option<usize> },
 }
