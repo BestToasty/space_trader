@@ -1,6 +1,8 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
+use crate::models::Meta;
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct WaypointData {
@@ -27,6 +29,20 @@ pub enum FactionSymbol {
     GALACTIC,
     QUANTUM,
     DOMINION,
+    ASTRO,
+    CORSAIRS,
+    OBSIDIAN,
+    AEGIS,
+    UNITED,
+    SOLITARY,
+    COBALT,
+    OMEGA,
+    ECHO,
+    LORDS,
+    CULT,
+    ANCIENTS,
+    SHADOW,
+    ETHEREAL,
 }
 
 #[allow(non_camel_case_types)]
@@ -157,4 +173,10 @@ pub struct Orbital {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct WaypointResponse {
     pub data: WaypointData,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct WaypointsResponse {
+    pub data: Vec<WaypointData>,
+    pub meta: Meta,
 }

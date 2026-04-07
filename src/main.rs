@@ -5,7 +5,7 @@ use cli::{Cli, Commands};
 use space_trader::{
     api::SpaceTradersClient,
     cache::{get_contract_by_id, get_ship_by_symbol},
-    models::LocalState,
+    logic::fetch_and_cache_shipyards,
 };
 mod cli_utils;
 
@@ -32,17 +32,24 @@ fn main() -> Result<()> {
                 println!("{}", ship.symbol)
             }
         }
-        Commands::AcceptContract { contract_id } => {
+        Commands::AcceptContractById { contract_id } => {
             let final_id = space_trader::logic::resolve_contract_id(contract_id)?;
             let contract = get_contract_by_id(&final_id)?;
             contract.accept_contract(&client)?;
         }
-        Commands::GetContractId { contract_number } => {
-            if let Some(n) = contract_number {
+        Commands::GetContractIdByIndex { contract_index } => {
+            if let Some(n) = contract_index {
                 let contract = space_trader::cache::get_contract_by_index(n)?;
                 println!("{}", contract.id)
             } else {
                 eprintln!("Keine ID angegeben");
+            }
+        }
+        Commands::CacheShipyardsInSystem { system_symbol } => {
+            if let Some(n) = system_symbol {
+                fetch_and_cache_shipyards(client, n)?;
+            } else {
+                eprintln!("[!] Kein Systemsymbol angegeben.");
             }
         }
     }

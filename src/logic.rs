@@ -1,8 +1,6 @@
 use std::io::{self, IsTerminal, Read};
 
-pub fn request_new_contract() -> anyhow::Result<()> {
-    todo!()
-}
+use crate::{api::SpaceTradersClient, cache::save_shipyard_system_waypoints_data};
 
 pub fn get_input_from_pipe() -> anyhow::Result<String> {
     let mut buffer = String::new();
@@ -12,7 +10,16 @@ pub fn get_input_from_pipe() -> anyhow::Result<String> {
     Ok(clean)
 }
 
-pub fn find_shipyard_near_waypoint(symbol: String) -> anyhow::Result<()> {
+pub fn fetch_and_cache_shipyards(
+    client: SpaceTradersClient,
+    system_symbol: String,
+) -> anyhow::Result<()> {
+    let shipyards = client.fetch_shipyards_in_system(system_symbol)?;
+    save_shipyard_system_waypoints_data(shipyards)?;
+    Ok(())
+}
+
+pub fn find_shipyard_near_waypoint(_symbol: String) -> anyhow::Result<()> {
     todo!()
 }
 

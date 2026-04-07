@@ -3,13 +3,19 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ShipyardResponse {
+    pub data: Vec<Shipyard>,
+    pub meta: Meta,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Shipyard {
-    symbol: String,
-    ship_types: ShipType,
-    transactions: Option<Transactions>,
-    ships: Option<ShipyardShip>,
-    modifications_fee: i32,
+    pub symbol: String,
+    pub ship_types: ShipType,
+    pub transactions: Option<Transactions>,
+    pub ships: Option<ShipyardShip>,
+    pub modifications_fee: i32,
 }
 
 #[allow(non_camel_case_types)]
@@ -33,27 +39,27 @@ pub enum ShipType {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Transactions {
-    waypoint_symbol: String,
-    ship_symbol: String,
-    ship_type: ShipType,
-    price: i32,
-    agent_symbol: String,
-    timestamp: DateTime<Utc>,
+    pub waypoint_symbol: String,
+    pub ship_symbol: String,
+    pub ship_type: ShipType,
+    pub price: i32,
+    pub agent_symbol: String,
+    pub timestamp: DateTime<Utc>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ShipyardShip {
     #[serde(rename = "type")]
-    ship_yard_type: ShipType,
-    name: String,
-    description: String,
-    activity: Option<Activity>,
-    supply: Supply,
-    purchase_price: i32,
-    frame: Frame,
-    reactor: Reactor,
-    engine: Engine,
+    pub ship_yard_type: ShipType,
+    pub name: String,
+    pub description: String,
+    pub activity: Option<Activity>,
+    pub supply: Supply,
+    pub purchase_price: i32,
+    pub frame: Frame,
+    pub reactor: Reactor,
+    pub engine: Engine,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

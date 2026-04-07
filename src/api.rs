@@ -225,4 +225,28 @@ impl SpaceTradersClient {
 
         Ok(())
     }
+
+    pub fn fetch_shipyards_in_system(&self, system_symbol: String) -> Result<Vec<WaypointData>> {
+        let path = format!("systems/{}/waypoints?traits=SHIPYARD", system_symbol);
+        let url = format!("{}/{}", HOST_URL, path);
+
+        let response = self
+            .client
+            .get(url)
+            .header("Authorization", format!("Bearer {}", self.token))
+            .send()?;
+
+        let body = response.text()?;
+        let jd = &mut serde_json::Deserializer::from_str(&body);
+
+        let result: Result<WaypointsResponse, _> = serde_path_to_error::deserialize(jd);
+
+        match result {
+            Ok(data) => Ok(data.data),
+            Err(err) => {
+                let path = err.path().to_string();
+                anyhow::bail!("Fehler im Feld: {} | Details: {}", path, err);
+            }
+        }
+    }
 }

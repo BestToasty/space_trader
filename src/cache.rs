@@ -1,5 +1,8 @@
 use crate::models::*;
-use crate::{AGENT_CACHE_FILE, CACHE_DIR, CONTRACT_CACHE_FILE, SHIPS_CACHE_FILE};
+use crate::{
+    AGENT_CACHE_FILE, CACHE_DIR, CONTRACT_CACHE_FILE, SHIPS_CACHE_FILE,
+    SHIPYARD_LOCATIONS_CACHE_FILE,
+};
 use std::fs;
 
 pub fn load_contracts() -> anyhow::Result<Vec<ContractData>> {
@@ -27,6 +30,27 @@ pub fn load_agent() -> anyhow::Result<AgentData> {
     let agent = serde_json::from_str(&json)?;
 
     Ok(agent)
+}
+
+pub fn save_shipyard_system_waypoints_data(
+    shipyard_waypoints: Vec<WaypointData>,
+) -> anyhow::Result<()> {
+    fs::create_dir_all("cache")?;
+
+    let json = serde_json::to_string_pretty(&shipyard_waypoints)?;
+    let path = "cache/shipyard_waypoints.json";
+
+    fs::write(path, json)?;
+    Ok(())
+}
+
+pub fn load_shipyard_system_locations_data() -> anyhow::Result<Vec<Shipyard>> {
+    let path = format!("{}/{}", CACHE_DIR, SHIPYARD_LOCATIONS_CACHE_FILE);
+
+    let json = fs::read_to_string(path)?;
+    let shipyards = serde_json::from_str(&json)?;
+
+    Ok(shipyards)
 }
 
 pub fn save_contracts(contract_data: &Vec<ContractData>) -> anyhow::Result<()> {

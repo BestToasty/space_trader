@@ -10,3 +10,4 @@ pub const CACHE_DIR: &str = "cache";
 pub const AGENT_CACHE_FILE: &str = "agent_cache.json";
 pub const SHIPS_CACHE_FILE: &str = "ships_cache.json";
 pub const CONTRACT_CACHE_FILE: &str = "contract_cache.json";
+pub const SHIPYARD_LOCATIONS_CACHE_FILE: &str = "shipyard_locations.json";
