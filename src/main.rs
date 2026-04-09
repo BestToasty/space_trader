@@ -4,10 +4,13 @@ use clap::Parser;
 use cli::{Cli, Commands};
 use space_trader::{
     api::SpaceTradersClient,
-    cache::{get_contract_by_id, get_ship_by_symbol, load_shipyard_system_waypoints},
+    cache::{
+        get_contract_by_id, get_ship_by_symbol, load_shipyard_system_waypoints,
+        load_system_waypoint,
+    },
     logic::{
         fetch_and_cache_shipyards, find_nearest_shipyard, resolve_coordinates,
-        resolve_system_symbol,
+        resolve_system_symbol, resolve_waypoint_symbol, split_waypoint,
     },
 };
 mod cli_utils;
@@ -68,19 +71,16 @@ fn main() -> Result<()> {
             println!("{}", waypoint.symbol);
         }
         Commands::FindClosestSystemShipyard { waypoint_symbol } => {
-            if let Some(symbol) = system_symbol {
-                let (x, y) = resolve_coordinates(x, y)?;
-                let shipyards = load_shipyard_system_waypoints(&symbol)?;
-                let shipyard_waypoint = find_nearest_shipyard(shipyards, x, y)?;
-                eprintln!(
-                    "Koordinaten des nächsten Shipyards: x: {}, y: {}",
-                    shipyard_waypoint.x, shipyard_waypoint.y
-                );
-                println!("{}", shipyard_waypoint.symbol)
-            } else {
-                eprintln!("[!] Kein Systemsymbol angegeben.")
-            }
+            let final_waypoint_symbol = resolve_waypoint_symbol(waypoint_symbol)?;
+            let waypoint_symbol_parts = split_waypoint(&final_waypoint_symbol)?;
+            let system_symbol =
+                format!("{}-{}", waypoint_symbol_parts[0], waypoint_symbol_parts[1]);
+            let shipyards = load_shipyard_system_waypoints(&system_symbol)?;
+            let waypoint = load_system_waypoint(final_waypoint_symbol)?;
+            let closest_shipyard = find_nearest_shipyard(shipyards, waypoint.x, waypoint.y)?;
+            println!("{}", closest_shipyard.symbol);
         }
+
         Commands::GetShipyard { waypoint_symbol } => {
             let final_waypoint_symbol =
                 space_trader::logic::resolve_waypoint_symbol(waypoint_symbol)?;

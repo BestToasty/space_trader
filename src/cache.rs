@@ -1,3 +1,4 @@
+use crate::logic::split_waypoint;
 use crate::models::*;
 use crate::{
     AGENT_CACHE_FILE, CACHE_DIR, CONTRACT_CACHE_FILE, SHIPS_CACHE_FILE,
@@ -83,6 +84,21 @@ pub fn save_system(system_symbol: String, system: System) -> anyhow::Result<()> 
     let json = serde_json::to_string_pretty(&waypoint_map)?;
     fs::write(file_path, json)?;
     Ok(())
+}
+
+pub fn load_system_waypoint(waypoint_symbol: String) -> anyhow::Result<SystemWaypoint> {
+    let waypoint_parts = split_waypoint(&waypoint_symbol)?;
+    let system_symbol = format!("{}-{}", waypoint_parts[0], waypoint_parts[1]);
+    let path = format!("{}/{}.json", CACHE_DIR, system_symbol);
+
+    let json = fs::read_to_string(path)?;
+    let waypoints: std::collections::HashMap<String, SystemWaypoint> = serde_json::from_str(&json)?;
+    let final_waypoint = waypoints.get(&waypoint_symbol);
+    if let Some(wp) = final_waypoint {
+        Ok(wp.clone())
+    } else {
+        anyhow::bail!("[!] Waypoint konnte im Waypoint System Cache nicht gefunden werden.")
+    }
 }
 
 pub fn load_shipyard_system_waypoints(system_symbol: &str) -> anyhow::Result<Vec<WaypointData>> {
