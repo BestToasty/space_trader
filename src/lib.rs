@@ -1,0 +1,13 @@
+pub mod api;
+pub mod cache;
+pub mod logic;
+pub mod models;
+
+pub const ACCOUNT_TOKEN: &str = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWVyIjoiU1RFUk5IQVVFUiIsInZlcnNpb24iOiJ2Mi4zLjAiLCJyZXNldF9kYXRlIjoiMjAyNi0wNC0wNSIsImlhdCI6MTc3NTQzNDA5Mywic3ViIjoiYWdlbnQtdG9rZW4ifQ.QAmh5OuKf4zrsByV3HX1uLl85hHNJbPTfKVHgZkFSkKkF1XQ2UqDrP-bJNJXJ9qpIAhpwCDV1JX4QXynahVXGgPTTYI-RUCq-ORjMEkr2Mqp9XUIlo4Pqg84GUBnKoF0J7Ee5H_V-2QuS98dXF4VOEJFzvE2kgQt_KeAiHRhODjgoZkUCe5KodQONUotVJPF1o7n2v1LW77wWeoLZgvDHRQ9baDjG-WBwrNgqPHYGt1oMfGOcZ7WYL_4a0rh2RkKPKsQ0LOEWRZK3Mr4sTLliza42kaRB9HovQDtcSpWIMv7h5zvgPSERJT1_MAcTvwHyIF5GMnoEZ79Tkb5_HNRDJBnWcY_ISynKfMiFOV_M-jwq3nbNtWat1PjQslNgHo6i9R6edQ75a9X3OZZALwkK8dHd__B5PXh1XfcWW-HOTh-pai3CMLHqHfhXrM5OXrAyWYR-_iZjvjelRNM_nOfbKSeb6P8zbB3vKSb9lM3WbOxbkLEY2InOXi7Gp1DniZ6qKt1_ut8snej4uE1OqWXwo3dUU0QflcbztAPmNd6Jv2CTR-2YIWxP0s_ZfI52W8NcW19mPcaJ8nmyjQuYdi4Izdm_9t8UmBVp2cjAJ9U7eBPdsjiJndAia2xi-ihyL2Xmi0L5A63bYZW2hOxWx612f3-rR1zExvgUJiznE6WPxc";
+pub const HOST_URL: &str = "https://api.spacetraders.io/v2/";
+
+pub const CACHE_DIR: &str = "cache";
+pub const AGENT_CACHE_FILE: &str = "agent_cache.json";
+pub const SHIPS_CACHE_FILE: &str = "ships_cache.json";
+pub const CONTRACT_CACHE_FILE: &str = "contract_cache.json";
+pub const SHIPYARD_LOCATIONS_CACHE_FILE: &str = "shipyard_waypoints.json";
