@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-use crate::models::Meta;
+use crate::models::{ApiError, Meta};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -172,11 +172,13 @@ pub struct WaypointOrbital {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct WaypointResponse {
-    pub data: WaypointData,
+    pub data: Option<WaypointData>,
+    pub error: Option<ApiError>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct WaypointsResponse {
-    pub data: Vec<WaypointData>,
-    pub meta: Meta,
+    pub data: Option<Vec<WaypointData>>,
+    pub meta: Option<Meta>,
+    pub error: Option<ApiError>,
 }

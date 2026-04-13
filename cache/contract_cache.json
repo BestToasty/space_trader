@@ -1,26 +1,26 @@
 [
   {
-    "id": "cmnmfm8ptbjsdui6zrt4x5bhw",
-    "factionSymbol": "OBSIDIAN",
+    "id": "cmnxee2zjtoquui6zv76novfz",
+    "factionSymbol": "COSMIC",
     "type": "PROCUREMENT",
     "terms": {
-      "deadline": "2026-04-13T00:08:11.676Z",
+      "deadline": "2026-04-20T16:19:19.324Z",
       "payment": {
-        "onAccepted": 1594,
-        "onFulfilled": 10096
+        "onAccepted": 1611,
+        "onFulfilled": 10790
       },
       "deliver": [
         {
-          "tradeSymbol": "ALUMINUM_ORE",
-          "destinationSymbol": "X1-VM20-H52",
-          "unitsRequired": 54,
+          "tradeSymbol": "COPPER_ORE",
+          "destinationSymbol": "X1-KU70-H51",
+          "unitsRequired": 62,
           "unitsFulfilled": 0
         }
       ]
     },
-    "accepted": true,
+    "accepted": false,
     "fulfilled": false,
-    "expiration": "2026-04-07T00:08:11.676Z",
-    "deadlineToAccept": "2026-04-07T00:08:11.676Z"
+    "expiration": "2026-04-14T16:19:19.324Z",
+    "deadlineToAccept": "2026-04-14T16:19:19.324Z"
   }
 ]

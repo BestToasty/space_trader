@@ -5,8 +5,9 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ShipResponse {
-    pub data: Vec<ShipData>,
-    pub meta: Meta,
+    pub data: Option<Vec<ShipData>>,
+    pub meta: Option<Meta>,
+    pub error: Option<ApiError>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

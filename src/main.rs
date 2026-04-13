@@ -2,16 +2,17 @@ mod cli;
 use anyhow::Result;
 use clap::Parser;
 use cli::{Cli, Commands};
+use space_trader::logic::fetch_and_cache_shipyards;
+use space_trader::logic::find_nearest_shipyard;
+use space_trader::logic::resolve_system_symbol;
+use space_trader::logic::resolve_waypoint_symbol;
 use space_trader::{
     api::SpaceTradersClient,
     cache::{
         get_contract_by_id, get_ship_by_symbol, load_shipyard_system_waypoints,
         load_system_waypoint,
     },
-    logic::{
-        fetch_and_cache_shipyards, find_nearest_shipyard, resolve_coordinates,
-        resolve_system_symbol, resolve_waypoint_symbol, split_waypoint,
-    },
+    logic::split_waypoint,
 };
 mod cli_utils;
 

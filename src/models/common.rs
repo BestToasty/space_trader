@@ -93,3 +93,15 @@ pub struct Frame {
     pub requirements: Requirement,
     pub symbol: FrameSymbol,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ApiError {
+    pub message: String,
+    pub code: i32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SpaceTradersResponse<T> {
+    pub data: Option<T>,
+    pub error: Option<ApiError>,
+}

@@ -1,10 +1,11 @@
-use crate::models::{FactionSymbol, WaypointOrbital, WaypointType};
+use crate::models::{ApiError, FactionSymbol, WaypointOrbital, WaypointType};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SystemResponse {
-    pub data: System,
+    pub data: Option<System>,
+    pub error: Option<ApiError>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

@@ -7,7 +7,7 @@
     },
     "cooldown": {
       "remainingSeconds": 0,
-      "shipSymbol": "STERNHAUER-1",
+      "shipSymbol": "FUNKELQUALM-1",
       "totalSeconds": 0,
       "expiration": null
     },
@@ -53,7 +53,7 @@
       "capacity": 400,
       "consumed": {
         "amount": 0,
-        "timestamp": "2026-04-06T00:08:11.688Z"
+        "timestamp": "2026-04-13T16:19:19.336Z"
       },
       "current": 400
     },
@@ -186,26 +186,26 @@
     "nav": {
       "flightMode": "CRUISE",
       "route": {
-        "arrival": "2026-04-06T00:08:11.688Z",
-        "departureTime": "2026-04-06T00:08:11.688Z",
+        "arrival": "2026-04-13T16:19:19.336Z",
+        "departureTime": "2026-04-13T16:19:19.336Z",
         "destination": {
-          "symbol": "X1-VM20-A1",
-          "systemSymbol": "X1-VM20",
+          "symbol": "X1-KU70-A1",
+          "systemSymbol": "X1-KU70",
           "type": "PLANET",
-          "x": -15,
-          "y": 20
+          "x": -20,
+          "y": 15
         },
         "origin": {
-          "symbol": "X1-VM20-A1",
-          "systemSymbol": "X1-VM20",
+          "symbol": "X1-KU70-A1",
+          "systemSymbol": "X1-KU70",
           "type": "PLANET",
-          "x": -15,
-          "y": 20
+          "x": -20,
+          "y": 15
         }
       },
       "status": "DOCKED",
-      "systemSymbol": "X1-VM20",
-      "waypointSymbol": "X1-VM20-A1"
+      "systemSymbol": "X1-KU70",
+      "waypointSymbol": "X1-KU70-A1"
     },
     "reactor": {
       "condition": 1,
@@ -222,11 +222,11 @@
       "symbol": "REACTOR_FISSION_I"
     },
     "registration": {
-      "factionSymbol": "OBSIDIAN",
-      "name": "STERNHAUER-1",
+      "factionSymbol": "COSMIC",
+      "name": "FUNKELQUALM-1",
       "role": "COMMAND"
     },
-    "symbol": "STERNHAUER-1"
+    "symbol": "FUNKELQUALM-1"
   },
   {
     "cargo": {
@@ -236,7 +236,7 @@
     },
     "cooldown": {
       "remainingSeconds": 0,
-      "shipSymbol": "STERNHAUER-2",
+      "shipSymbol": "FUNKELQUALM-2",
       "totalSeconds": 0,
       "expiration": null
     },
@@ -282,7 +282,7 @@
       "capacity": 0,
       "consumed": {
         "amount": 0,
-        "timestamp": "2026-04-06T00:08:11.698Z"
+        "timestamp": "2026-04-13T16:19:19.344Z"
       },
       "current": 0
     },
@@ -291,26 +291,26 @@
     "nav": {
       "flightMode": "CRUISE",
       "route": {
-        "arrival": "2026-04-06T00:08:11.698Z",
-        "departureTime": "2026-04-06T00:08:11.698Z",
+        "arrival": "2026-04-13T16:19:19.344Z",
+        "departureTime": "2026-04-13T16:19:19.344Z",
         "destination": {
-          "symbol": "X1-VM20-H53",
-          "systemSymbol": "X1-VM20",
+          "symbol": "X1-KU70-H52",
+          "systemSymbol": "X1-KU70",
           "type": "MOON",
-          "x": -41,
-          "y": -15
+          "x": -15,
+          "y": -43
         },
         "origin": {
-          "symbol": "X1-VM20-H53",
-          "systemSymbol": "X1-VM20",
+          "symbol": "X1-KU70-H52",
+          "systemSymbol": "X1-KU70",
           "type": "MOON",
-          "x": -41,
-          "y": -15
+          "x": -15,
+          "y": -43
         }
       },
       "status": "DOCKED",
-      "systemSymbol": "X1-VM20",
-      "waypointSymbol": "X1-VM20-H53"
+      "systemSymbol": "X1-KU70",
+      "waypointSymbol": "X1-KU70-H52"
     },
     "reactor": {
       "condition": 1,
@@ -327,10 +327,10 @@
       "symbol": "REACTOR_SOLAR_I"
     },
     "registration": {
-      "factionSymbol": "OBSIDIAN",
-      "name": "STERNHAUER-2",
+      "factionSymbol": "COSMIC",
+      "name": "FUNKELQUALM-2",
       "role": "SATELLITE"
     },
-    "symbol": "STERNHAUER-2"
+    "symbol": "FUNKELQUALM-2"
   }
 ]

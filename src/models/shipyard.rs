@@ -4,8 +4,9 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ShipyardResponse {
-    pub data: Shipyard,
-    pub meta: Meta,
+    pub data: Option<Shipyard>,
+    pub meta: Option<Meta>,
+    pub error: Option<ApiError>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

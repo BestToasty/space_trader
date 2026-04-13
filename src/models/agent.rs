@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::models::ApiError;
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentData {
@@ -13,5 +15,6 @@ pub struct AgentData {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AgentResponse {
-    pub data: AgentData,
+    pub data: Option<AgentData>,
+    pub error: Option<ApiError>,
 }

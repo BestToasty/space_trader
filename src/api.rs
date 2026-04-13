@@ -101,18 +101,18 @@ impl SpaceTradersClient {
             .client
             .get(url)
             .header("Authorization", format!("Bearer {}", self.token))
-            .send()?
-            .json::<ContractResponse>()?;
+            .send()?;
 
-        let mut state: LocalState = self.load_state();
+        let status = response.status();
+        let body = response.json::<ContractResponse>()?;
 
-        if let Some(first) = response.data.first() {
-            state.last_contract_id = Some(first.id.clone());
-            self.save_state(&state)?;
-            self.update_state(StateUpdate::LastContractId(first.id.clone()))?;
+        if let Some(data) = body.data {
+            Ok(data)
+        } else if let Some(err) = body.error {
+            anyhow::bail!("API Fehler {}: {}", err.code, err.message)
+        } else {
+            anyhow::bail!("[!] Unbekanntes Antwortformat bei Status {}", status)
         }
-
-        Ok(response.data)
     }
 
     pub fn fetch_waypoint_data(&self, waypoint_symbol: String) -> Result<WaypointData> {
@@ -128,17 +128,16 @@ impl SpaceTradersClient {
             .header("Authorization", format!("Bearer {}", self.token))
             .send()?;
 
-        if !response.status().is_success() {
-            let status = response.status();
-            let error_text = response.text()?;
-            anyhow::bail!("API Fehler (Status {}): {}", status, error_text);
+        let status = response.status();
+        let body = response.json::<WaypointResponse>()?;
+
+        if let Some(data) = body.data {
+            Ok(data)
+        } else if let Some(err) = body.error {
+            anyhow::bail!("API Fehler {}: {}", err.code, err.message)
+        } else {
+            anyhow::bail!("[!] Unbekanntes Antwortformat bei Status {}", status)
         }
-
-        let text = response.text()?;
-
-        let res: WaypointResponse = serde_json::from_str(&text)?;
-
-        Ok(res.data)
     }
 
     pub fn fetch_shipyard_data(&self, waypoint_symbol: String) -> Result<()> {
@@ -154,11 +153,19 @@ impl SpaceTradersClient {
             .client
             .get(url)
             .header("Authorization", format!("Bearer {}", self.token))
-            .send()?
-            .json::<ShipyardResponse>()?;
+            .send()?;
 
-        save_shipyard(system_symbol, response.data)?;
-        Ok(())
+        let status = response.status();
+        let body = response.json::<ShipyardResponse>()?;
+
+        if let Some(data) = body.data {
+            save_shipyard(system_symbol, data)?;
+            Ok(())
+        } else if let Some(err) = body.error {
+            anyhow::bail!("API Fehler {}: {}", err.code, err.message)
+        } else {
+            anyhow::bail!("[!] Unbekanntes Antwortformat bei Status {}", status)
+        }
     }
 
     pub fn fetch_system(&self, system_symbol: String) -> Result<()> {
@@ -169,11 +176,19 @@ impl SpaceTradersClient {
             .client
             .get(url)
             .header("Authorization", format!("Bearer {}", self.token))
-            .send()?
-            .json::<SystemResponse>()?;
+            .send()?;
 
-        save_system(system_symbol, response.data)?;
-        Ok(())
+        let status = response.status();
+        let body = response.json::<SystemResponse>()?;
+
+        if let Some(data) = body.data {
+            save_system(system_symbol, data)?;
+            Ok(())
+        } else if let Some(err) = body.error {
+            anyhow::bail!("API Fehler {}: {}", err.code, err.message)
+        } else {
+            anyhow::bail!("[!] Unbekanntes Antwortformat bei Status {}", status)
+        }
     }
 
     pub fn get_starting_waypoint(&mut self) -> Result<WaypointData> {
@@ -190,15 +205,16 @@ impl SpaceTradersClient {
             .header("Authorization", format!("Bearer {}", self.token))
             .send()?;
 
-        if !response.status().is_success() {
-            let status = response.status();
-            let error_text = response.text()?;
-            anyhow::bail!("API Fehler (Status {}): {}", status, error_text);
-        }
+        let status = response.status();
+        let body = response.json::<WaypointResponse>()?;
 
-        let text = response.text()?;
-        let res: WaypointResponse = serde_json::from_str(&text)?;
-        Ok(res.data)
+        if let Some(data) = body.data {
+            Ok(data)
+        } else if let Some(err) = body.error {
+            anyhow::bail!("API Fehler {}: {}", err.code, err.message)
+        } else {
+            anyhow::bail!("[!] Unbekanntes Antwortformat bei Status {}", status)
+        }
     }
 
     pub fn get_agent(&mut self) -> Result<&AgentData> {
@@ -219,10 +235,18 @@ impl SpaceTradersClient {
             .client
             .get(url)
             .header("Authorization", format!("Bearer {}", self.token))
-            .send()?
-            .json::<AgentResponse>()?;
+            .send()?;
 
-        Ok(response.data)
+        let status = response.status();
+        let body = response.json::<AgentResponse>()?;
+
+        if let Some(data) = body.data {
+            Ok(data)
+        } else if let Some(err) = body.error {
+            anyhow::bail!("API Fehler {}: {}", err.code, err.message)
+        } else {
+            anyhow::bail!("[!] Unbekanntes Antwortformat bei Status {}", status)
+        }
     }
 
     pub fn get_ships(&mut self) -> Result<&Vec<ShipData>> {
@@ -243,14 +267,18 @@ impl SpaceTradersClient {
             .client
             .get(url)
             .header("Authorization", format!("Bearer {}", self.token))
-            .send()?
-            .json::<ShipResponse>()?;
+            .send()?;
 
-        if let Some(first) = response.data.first() {
-            self.update_state(StateUpdate::LastShipSymbol(first.symbol.clone()))?;
+        let status = response.status();
+        let body = response.json::<ShipResponse>()?;
+
+        if let Some(data) = body.data {
+            Ok(data)
+        } else if let Some(err) = body.error {
+            anyhow::bail!("API Fehler {}: {}", err.code, err.message)
+        } else {
+            anyhow::bail!("[!] Unbekanntes Antwortformat bei Status {}", status)
         }
-
-        Ok(response.data)
     }
 
     pub fn update_last_ship_symbol(&mut self) -> Result<()> {
@@ -303,17 +331,15 @@ impl SpaceTradersClient {
             .header("Authorization", format!("Bearer {}", self.token))
             .send()?;
 
-        let body = response.text()?;
-        let jd = &mut serde_json::Deserializer::from_str(&body);
+        let status = response.status();
+        let body = response.json::<WaypointsResponse>()?;
 
-        let result: Result<WaypointsResponse, _> = serde_path_to_error::deserialize(jd);
-
-        match result {
-            Ok(data) => Ok(data.data),
-            Err(err) => {
-                let path = err.path().to_string();
-                anyhow::bail!("Fehler im Feld: {} | Details: {}", path, err);
-            }
+        if let Some(data) = body.data {
+            Ok(data)
+        } else if let Some(err) = body.error {
+            anyhow::bail!("API Fehler {}: {}", err.code, err.message)
+        } else {
+            anyhow::bail!("[!] Unbekanntes Antwortformat bei Status {}", status)
         }
     }
 }

@@ -1,11 +1,12 @@
-use crate::models::common::Meta;
+use crate::models::{ApiError, common::Meta};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ContractResponse {
-    pub data: Vec<ContractData>,
-    pub meta: Meta,
+    pub data: Option<Vec<ContractData>>,
+    pub meta: Option<Meta>,
+    pub error: Option<ApiError>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
