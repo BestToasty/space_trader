@@ -52,10 +52,10 @@
     "fuel": {
       "capacity": 400,
       "consumed": {
-        "amount": 0,
-        "timestamp": "2026-04-13T16:19:19.336Z"
+        "amount": 58,
+        "timestamp": "2026-04-15T14:42:28.223Z"
       },
-      "current": 400
+      "current": 342
     },
     "modules": [
       {
@@ -186,14 +186,14 @@
     "nav": {
       "flightMode": "CRUISE",
       "route": {
-        "arrival": "2026-04-13T16:19:19.336Z",
-        "departureTime": "2026-04-13T16:19:19.336Z",
+        "arrival": "2026-04-15T14:43:23.212Z",
+        "departureTime": "2026-04-15T14:42:28.212Z",
         "destination": {
-          "symbol": "X1-KU70-A1",
+          "symbol": "X1-KU70-H52",
           "systemSymbol": "X1-KU70",
-          "type": "PLANET",
-          "x": -20,
-          "y": 15
+          "type": "MOON",
+          "x": -15,
+          "y": -43
         },
         "origin": {
           "symbol": "X1-KU70-A1",
@@ -203,9 +203,9 @@
           "y": 15
         }
       },
-      "status": "DOCKED",
+      "status": "IN_ORBIT",
       "systemSymbol": "X1-KU70",
-      "waypointSymbol": "X1-KU70-A1"
+      "waypointSymbol": "X1-KU70-H52"
     },
     "reactor": {
       "condition": 1,

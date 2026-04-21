@@ -55,7 +55,24 @@ pub fn save_shipyard_system_waypoints(
     Ok(())
 }
 
-pub fn save_shipyard(system_symbol: String, shipyard: Shipyard) -> anyhow::Result<()> {
+pub fn list_shipyard_ship_types(waypoint_symbol: String) -> anyhow::Result<()> {
+    let file_path = "cache/shipyards.json";
+    let json = fs::read_to_string(file_path)?;
+    let all_shipyards: std::collections::HashMap<String, Shipyard> = serde_json::from_str(&json)?;
+    let shipyard = all_shipyards.get(&waypoint_symbol);
+    if let Some(shipyard) = shipyard {
+        shipyard
+            .ship_types
+            .iter()
+            .enumerate()
+            .for_each(|(_, s)| println!("{:?}", s.ship_type));
+    } else {
+        println!("[!] No Ship Types listed.");
+    }
+    Ok(())
+}
+
+pub fn save_shipyard(waypoint_symbol: String, shipyard: Shipyard) -> anyhow::Result<()> {
     let file_path = "cache/shipyards.json";
 
     let mut cache: HashMap<String, Shipyard> = if Path::new(file_path).exists() {
@@ -65,7 +82,7 @@ pub fn save_shipyard(system_symbol: String, shipyard: Shipyard) -> anyhow::Resul
         HashMap::new()
     };
 
-    cache.insert(system_symbol, shipyard);
+    cache.insert(waypoint_symbol, shipyard);
 
     let json = serde_json::to_string_pretty(&cache)?;
     fs::write(file_path, json)?;
@@ -205,5 +222,22 @@ pub fn update_ship_in_cache(updated: ShipData) -> anyhow::Result<()> {
     }
 
     save_ships(&ships)?;
+    Ok(())
+}
+
+pub fn cache_system_shipyard(system_symbol: String, shipyard_data: Shipyard) -> anyhow::Result<()> {
+    let path = format!("cache/{}_shipyards.json", system_symbol);
+    if Path::new(&path).exists() {
+        let json = fs::read_to_string(path.clone())?;
+        let mut shipyards: HashMap<String, Shipyard> = serde_json::from_str(&json)?;
+        shipyards.insert(shipyard_data.symbol.clone(), shipyard_data);
+        let json = serde_json::to_string_pretty(&shipyards)?;
+        fs::write(path, json)?;
+    } else {
+        let mut shipyards = HashMap::new();
+        shipyards.insert(shipyard_data.symbol.clone(), shipyard_data);
+        let json = serde_json::to_string_pretty(&shipyards)?;
+        fs::write(path, json)?;
+    }
     Ok(())
 }

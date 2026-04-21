@@ -1,4 +1,11 @@
-use crate::{api::SpaceTradersClient, cache::save_shipyard_system_waypoints, models::WaypointData};
+use crate::{
+    api::SpaceTradersClient,
+    cache::{
+        cache_system_shipyard, load_shipyard_system_waypoints, save_shipyard,
+        save_shipyard_system_waypoints,
+    },
+    models::WaypointData,
+};
 use std::{
     i32,
     io::{self, IsTerminal, Read},
@@ -21,8 +28,26 @@ pub fn fetch_and_cache_shipyards(
     Ok(())
 }
 
-pub fn find_shipyard_near_waypoint(_symbol: String) -> anyhow::Result<()> {
-    todo!()
+pub fn fetch_and_cache_shipyard_data(
+    client: SpaceTradersClient,
+    waypoint_symbol: String,
+) -> anyhow::Result<()> {
+    let shipyard = client.fetch_shipyard_data(waypoint_symbol.clone())?;
+    save_shipyard(waypoint_symbol, shipyard)?;
+    Ok(())
+}
+
+pub fn fetch_and_cache_system_shipyards(
+    client: SpaceTradersClient,
+    system_symbol: String,
+) -> anyhow::Result<()> {
+    // for each shipyard in SYSTEM
+    let shipyards = load_shipyard_system_waypoints(&system_symbol)?;
+    for shipyard_waypoint in shipyards {
+        let shipyard_data = client.fetch_shipyard_data(shipyard_waypoint.symbol)?;
+        cache_system_shipyard(system_symbol.clone(), shipyard_data)?;
+    }
+    Ok(())
 }
 
 pub fn resolve_waypoint_symbol(arg_symbol: Option<String>) -> anyhow::Result<String> {

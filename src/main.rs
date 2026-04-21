@@ -2,8 +2,13 @@ mod cli;
 use anyhow::Result;
 use clap::Parser;
 use cli::{Cli, Commands};
+use space_trader::cache::list_shipyard_ship_types;
+use space_trader::cache::load_agent;
+use space_trader::logic::fetch_and_cache_shipyard_data;
 use space_trader::logic::fetch_and_cache_shipyards;
+use space_trader::logic::fetch_and_cache_system_shipyards;
 use space_trader::logic::find_nearest_shipyard;
+use space_trader::logic::resolve_ship_symbol;
 use space_trader::logic::resolve_system_symbol;
 use space_trader::logic::resolve_waypoint_symbol;
 use space_trader::{
@@ -53,11 +58,8 @@ fn main() -> Result<()> {
             }
         }
         Commands::CacheShipyardsInSystem { system_symbol } => {
-            if let Some(n) = system_symbol {
-                fetch_and_cache_shipyards(client, n)?;
-            } else {
-                eprintln!("[!] Kein Systemsymbol angegeben.");
-            }
+            let symbol = resolve_system_symbol(system_symbol)?;
+            fetch_and_cache_shipyards(client, symbol)?;
         }
         Commands::GetWaypointCoordinates { waypoint_symbol } => {
             let final_waypoint_symbol =
@@ -67,9 +69,10 @@ fn main() -> Result<()> {
             println!("{}:{}", waypoint.x, waypoint.y);
         }
         Commands::GetStartingWaypointSymbol {} => {
-            let waypoint = client.get_starting_waypoint()?;
-            eprintln!("Waypoint Symbol: {}", waypoint.symbol);
-            println!("{}", waypoint.symbol);
+            let agent = load_agent()?;
+            let waypoint = agent.headquarters;
+            eprintln!("Waypoint Symbol: {}", waypoint);
+            println!("{}", waypoint);
         }
         Commands::FindClosestSystemShipyard { waypoint_symbol } => {
             let final_waypoint_symbol = resolve_waypoint_symbol(waypoint_symbol)?;
@@ -81,15 +84,65 @@ fn main() -> Result<()> {
             let closest_shipyard = find_nearest_shipyard(shipyards, waypoint.x, waypoint.y)?;
             println!("{}", closest_shipyard.symbol);
         }
-
         Commands::GetShipyard { waypoint_symbol } => {
             let final_waypoint_symbol =
                 space_trader::logic::resolve_waypoint_symbol(waypoint_symbol)?;
-            client.fetch_shipyard_data(final_waypoint_symbol)?;
+            fetch_and_cache_shipyard_data(client, final_waypoint_symbol)?;
         }
         Commands::GetSystem { system_symbol } => {
             let final_system_symbol = resolve_system_symbol(system_symbol)?;
             client.fetch_system(final_system_symbol)?;
+        }
+        Commands::GetStartingWaypoint {} => {
+            let agent = load_agent()?;
+            println!("{}", agent.headquarters);
+        }
+        Commands::ParseToSystemSymbol { waypoint_symbol } => {
+            let final_waypoint_symbol = resolve_waypoint_symbol(waypoint_symbol)?;
+            let parts = split_waypoint(&final_waypoint_symbol)?;
+            println!("{}-{}", parts[0], parts[1]);
+        }
+        Commands::ListShipyardTypes { waypoint_symbol } => {
+            let final_waypoint_symbol =
+                space_trader::logic::resolve_waypoint_symbol(waypoint_symbol)?;
+            list_shipyard_ship_types(final_waypoint_symbol)?;
+        }
+        Commands::GetSystemShipyardData { system_symbol } => {
+            let final_system_symbol = resolve_system_symbol(system_symbol)?;
+            fetch_and_cache_system_shipyards(client, final_system_symbol)?;
+        }
+        Commands::NavigateShip {
+            ship_symbol,
+            destination_symbol,
+        } => {
+            let final_waypoint_symbol = resolve_waypoint_symbol(destination_symbol)?;
+            let navigation = client.navigate_ship(final_waypoint_symbol, ship_symbol)?;
+            let travel_time = navigation.route.departure_time - navigation.route.arrival;
+            eprintln!(
+                "Ship is arriving {} in {} seconds.",
+                navigation.route.destination.symbol,
+                travel_time.num_seconds()
+            );
+        }
+        Commands::OrbitShip { ship_symbol } => {
+            let final_ship_symbol = resolve_ship_symbol(ship_symbol)?;
+            let navigation = client.orbit_ship(final_ship_symbol)?;
+            let travel_time = navigation.route.departure_time - navigation.route.arrival;
+            eprintln!(
+                "Ship is arriving {} in {} seconds.",
+                navigation.route.destination.symbol,
+                travel_time.num_seconds()
+            );
+        }
+        Commands::DockShip { ship_symbol } => {
+            let final_ship_symbol = resolve_ship_symbol(ship_symbol)?;
+            let navigation = client.dock_ship(final_ship_symbol)?;
+            let travel_time = navigation.route.departure_time - navigation.route.arrival;
+            eprintln!(
+                "Ship is arriving {} in {} seconds.",
+                navigation.route.destination.symbol,
+                travel_time.num_seconds()
+            );
         }
     }
     Ok(())

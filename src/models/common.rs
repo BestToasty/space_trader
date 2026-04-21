@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::models::ShipNavigation;
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Meta {
     pub total: i32,
@@ -104,4 +106,16 @@ pub struct ApiError {
 pub struct SpaceTradersResponse<T> {
     pub data: Option<T>,
     pub error: Option<ApiError>,
+    pub meta: Option<Meta>,
+}
+
+#[derive(Serialize)]
+pub struct PurchaseRequest {
+    #[serde(rename = "waypointSymbol")]
+    pub waypoint_symbol: String,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct NavData {
+    pub nav: ShipNavigation,
 }

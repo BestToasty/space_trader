@@ -1,0 +1,152 @@
+{
+  "X1-KU70-H52": {
+    "symbol": "X1-KU70-H52",
+    "shipTypes": [
+      {
+        "type": "SHIP_MINING_DRONE"
+      },
+      {
+        "type": "SHIP_SURVEYOR"
+      }
+    ],
+    "transactions": [],
+    "ships": [
+      {
+        "type": "SHIP_MINING_DRONE",
+        "name": "Mining Drone",
+        "description": "A small, unmanned spacecraft that can be used for mining operations, such as extracting valuable minerals from asteroids.",
+        "activity": "GROWING",
+        "supply": "HIGH",
+        "purchasePrice": 38957,
+        "frame": {
+          "condition": 1,
+          "description": "A small, unmanned spacecraft used for various tasks, such as surveillance, transportation, or combat.",
+          "fuelCapacity": 80,
+          "integrity": 1,
+          "moduleSlots": 3,
+          "mountingPoints": 2,
+          "name": "Drone",
+          "quality": 1,
+          "requirements": {
+            "crew": -4,
+            "power": 1,
+            "slots": null
+          },
+          "symbol": "FRAME_DRONE"
+        },
+        "reactor": {
+          "condition": 1,
+          "description": "A basic chemical power reactor, used to generate electricity from chemical reactions.",
+          "integrity": 1,
+          "name": "Chemical Reactor I",
+          "powerOutput": 15,
+          "quality": 3,
+          "requirements": {
+            "crew": 3,
+            "power": null,
+            "slots": null
+          },
+          "symbol": "REACTOR_CHEMICAL_I"
+        },
+        "engine": {
+          "condition": 1,
+          "description": "A basic low-energy propulsion system that generates thrust for interplanetary travel.",
+          "integrity": 1,
+          "name": "Impulse Drive I",
+          "quality": 1,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": null
+          },
+          "speed": 9,
+          "symbol": "ENGINE_IMPULSE_DRIVE_I"
+        }
+      },
+      {
+        "type": "SHIP_SURVEYOR",
+        "name": "Surveyor Craft",
+        "description": "A specialized spacecraft equipped with surveying mounts, designed for detailed surveying of celestial bodies, resource identification, and scientific research.",
+        "activity": "GROWING",
+        "supply": "HIGH",
+        "purchasePrice": 31931,
+        "frame": {
+          "condition": 1,
+          "description": "A small, unmanned spacecraft used for various tasks, such as surveillance, transportation, or combat.",
+          "fuelCapacity": 80,
+          "integrity": 1,
+          "moduleSlots": 3,
+          "mountingPoints": 2,
+          "name": "Drone",
+          "quality": 1,
+          "requirements": {
+            "crew": -4,
+            "power": 1,
+            "slots": null
+          },
+          "symbol": "FRAME_DRONE"
+        },
+        "reactor": {
+          "condition": 1,
+          "description": "A basic chemical power reactor, used to generate electricity from chemical reactions.",
+          "integrity": 1,
+          "name": "Chemical Reactor I",
+          "powerOutput": 15,
+          "quality": 3,
+          "requirements": {
+            "crew": 3,
+            "power": null,
+            "slots": null
+          },
+          "symbol": "REACTOR_CHEMICAL_I"
+        },
+        "engine": {
+          "condition": 1,
+          "description": "A basic low-energy propulsion system that generates thrust for interplanetary travel.",
+          "integrity": 1,
+          "name": "Impulse Drive I",
+          "quality": 1,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": null
+          },
+          "speed": 9,
+          "symbol": "ENGINE_IMPULSE_DRIVE_I"
+        }
+      }
+    ],
+    "modificationsFee": 100
+  },
+  "X1-KU70-A2": {
+    "symbol": "X1-KU70-A2",
+    "shipTypes": [
+      {
+        "type": "SHIP_PROBE"
+      },
+      {
+        "type": "SHIP_LIGHT_SHUTTLE"
+      },
+      {
+        "type": "SHIP_LIGHT_HAULER"
+      }
+    ],
+    "transactions": null,
+    "ships": null,
+    "modificationsFee": 100
+  },
+  "X1-KU70-C40": {
+    "symbol": "X1-KU70-C40",
+    "shipTypes": [
+      {
+        "type": "SHIP_PROBE"
+      },
+      {
+        "type": "SHIP_SIPHON_DRONE"
+      }
+    ],
+    "transactions": null,
+    "ships": null,
+    "modificationsFee": 100
+  }
+}

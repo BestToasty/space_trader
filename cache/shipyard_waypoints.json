@@ -1,36 +1,41 @@
 {
-  "X1-VM20": [
+  "X1-KU70": [
     {
-      "symbol": "X1-VM20-A2",
+      "symbol": "X1-KU70-A2",
       "type": "MOON",
-      "systemSymbol": "X1-VM20",
-      "x": -15,
-      "y": 20,
+      "systemSymbol": "X1-KU70",
+      "x": -20,
+      "y": 15,
       "orbitals": [],
-      "orbits": "X1-VM20-A1",
+      "orbits": "X1-KU70-A1",
       "faction": {
-        "symbol": "OBSIDIAN"
+        "symbol": "COSMIC"
       },
       "traits": [
         {
-          "symbol": "ROCKY",
-          "name": "Rocky",
-          "description": "A world with a rugged, rocky landscape, rich in minerals and other resources, providing a variety of opportunities for mining, research, and exploration."
+          "symbol": "FROZEN",
+          "name": "Frozen",
+          "description": "An ice-covered world with frigid temperatures, providing unique research opportunities and resources such as ice water, ammonia ice, and other frozen compounds."
         },
         {
-          "symbol": "SPRAWLING_CITIES",
-          "name": "Sprawling Cities",
-          "description": "Expansive urban centers that stretch across the landscape, boasting advanced infrastructure and diverse populations."
+          "symbol": "SCATTERED_SETTLEMENTS",
+          "name": "Scattered Settlements",
+          "description": "A collection of dispersed communities, each independent yet connected through trade and communication networks."
         },
         {
-          "symbol": "TERRAFORMED",
-          "name": "Terraformed",
-          "description": "A waypoint that has been artificially transformed to support life, showcasing the engineering prowess of its inhabitants and providing a hospitable environment for colonization."
+          "symbol": "EXTREME_TEMPERATURES",
+          "name": "Extreme Temperatures",
+          "description": "A waypoint with scorching heat or freezing cold, requiring specialized equipment and technology to survive and thrive in these harsh environments."
         },
         {
           "symbol": "CORROSIVE_ATMOSPHERE",
           "name": "Corrosive Atmosphere",
           "description": "A hostile environment with an atmosphere that can rapidly degrade materials and equipment, requiring advanced engineering solutions to ensure the safety and longevity of structures and vehicles."
+        },
+        {
+          "symbol": "TERRAFORMED",
+          "name": "Terraformed",
+          "description": "A waypoint that has been artificially transformed to support life, showcasing the engineering prowess of its inhabitants and providing a hospitable environment for colonization."
         },
         {
           "symbol": "STRONG_MAGNETOSPHERE",
@@ -51,21 +56,21 @@
       "isUnderConstruction": false,
       "modifiers": [],
       "chart": {
-        "waypointSymbol": "X1-VM20-A2",
-        "submittedBy": "OBSIDIAN",
-        "submittedOn": "2026-04-05T13:02:02.559Z"
+        "waypointSymbol": "X1-KU70-A2",
+        "submittedBy": "COSMIC",
+        "submittedOn": "2026-04-12T13:02:06.360Z"
       }
     },
     {
-      "symbol": "X1-VM20-C43",
+      "symbol": "X1-KU70-C40",
       "type": "ORBITAL_STATION",
-      "systemSymbol": "X1-VM20",
-      "x": 102,
-      "y": -118,
+      "systemSymbol": "X1-KU70",
+      "x": 149,
+      "y": -40,
       "orbitals": [],
-      "orbits": "X1-VM20-C42",
+      "orbits": "X1-KU70-C39",
       "faction": {
-        "symbol": "OBSIDIAN"
+        "symbol": "COSMIC"
       },
       "traits": [
         {
@@ -92,21 +97,21 @@
       "isUnderConstruction": false,
       "modifiers": [],
       "chart": {
-        "waypointSymbol": "X1-VM20-C43",
-        "submittedBy": "OBSIDIAN",
-        "submittedOn": "2026-04-05T13:02:02.559Z"
+        "waypointSymbol": "X1-KU70-C40",
+        "submittedBy": "COSMIC",
+        "submittedOn": "2026-04-12T13:02:06.360Z"
       }
     },
     {
-      "symbol": "X1-VM20-H53",
+      "symbol": "X1-KU70-H52",
       "type": "MOON",
-      "systemSymbol": "X1-VM20",
-      "x": -41,
-      "y": -15,
+      "systemSymbol": "X1-KU70",
+      "x": -15,
+      "y": -43,
       "orbitals": [],
-      "orbits": "X1-VM20-H52",
+      "orbits": "X1-KU70-H51",
       "faction": {
-        "symbol": "OBSIDIAN"
+        "symbol": "COSMIC"
       },
       "traits": [
         {
@@ -115,9 +120,14 @@
           "description": "A volatile world marked by intense volcanic activity, creating a hazardous environment with the potential for valuable resource extraction, such as rare metals and geothermal energy."
         },
         {
-          "symbol": "OUTPOST",
-          "name": "Outpost",
-          "description": "A small, remote settlement providing essential services and a safe haven for travelers passing through."
+          "symbol": "SPRAWLING_CITIES",
+          "name": "Sprawling Cities",
+          "description": "Expansive urban centers that stretch across the landscape, boasting advanced infrastructure and diverse populations."
+        },
+        {
+          "symbol": "EXTREME_PRESSURE",
+          "name": "Extreme Pressure",
+          "description": "A location characterized by immense atmospheric pressure, demanding robust engineering solutions and innovative approaches for exploration and resource extraction."
         },
         {
           "symbol": "INDUSTRIAL",
@@ -138,9 +148,9 @@
       "isUnderConstruction": false,
       "modifiers": [],
       "chart": {
-        "waypointSymbol": "X1-VM20-H53",
-        "submittedBy": "OBSIDIAN",
-        "submittedOn": "2026-04-05T13:02:02.559Z"
+        "waypointSymbol": "X1-KU70-H52",
+        "submittedBy": "COSMIC",
+        "submittedOn": "2026-04-12T13:02:06.360Z"
       }
     }
   ]

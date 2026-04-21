@@ -13,10 +13,17 @@ pub struct ShipyardResponse {
 #[serde(rename_all = "camelCase")]
 pub struct Shipyard {
     pub symbol: String,
-    pub ship_types: ShipType,
-    pub transactions: Option<Transactions>,
-    pub ships: Option<ShipyardShip>,
+    pub ship_types: Vec<Shiptypes>,
+    pub transactions: Option<Vec<ShipyardTransactions>>,
+    pub ships: Option<Vec<ShipyardShip>>,
     pub modifications_fee: i32,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Shiptypes {
+    #[serde(rename = "type")]
+    pub ship_type: ShipType,
 }
 
 #[allow(non_camel_case_types)]
@@ -39,7 +46,7 @@ pub enum ShipType {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct Transactions {
+pub struct ShipyardTransactions {
     pub waypoint_symbol: String,
     pub ship_symbol: String,
     pub ship_type: ShipType,

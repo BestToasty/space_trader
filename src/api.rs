@@ -1,10 +1,9 @@
-use crate::cache::{save_shipyard, save_system};
-use crate::logic::split_waypoint;
-use crate::models::*;
-use crate::{ACCOUNT_TOKEN, HOST_URL};
+use crate::ACCOUNT_TOKEN;
+use crate::HOST_URL;
+use crate::cache::save_system;
+use crate::{logic::split_waypoint, models::*};
 use anyhow::Result;
 use reqwest::blocking::Client;
-use std::fs;
 
 pub struct SpaceTradersClient {
     client: Client,
@@ -37,20 +36,6 @@ impl SpaceTradersClient {
         crate::cache::save_agent(self.agent.as_ref().unwrap())?;
         crate::cache::save_ships(self.ships.as_ref().unwrap())?;
         crate::cache::save_contracts(self.contracts.as_ref().unwrap())?;
-        Ok(())
-    }
-
-    // to be removed
-    pub fn load_state(&self) -> LocalState {
-        fs::read_to_string("state.json")
-            .and_then(|data| Ok(serde_json::from_str(&data)?))
-            .unwrap_or_default()
-    }
-    // to be removed
-    pub fn save_state(&self, state: &LocalState) -> Result<()> {
-        let path = "cache/state.json";
-        let data = serde_json::to_string_pretty(state)?;
-        fs::write(path, data)?;
         Ok(())
     }
 
@@ -140,7 +125,7 @@ impl SpaceTradersClient {
         }
     }
 
-    pub fn fetch_shipyard_data(&self, waypoint_symbol: String) -> Result<()> {
+    pub fn fetch_shipyard_data(&self, waypoint_symbol: String) -> Result<Shipyard> {
         let parts = split_waypoint(&waypoint_symbol)?;
         let system_symbol = format!("{}-{}", parts[0], parts[1]);
         let path = format!(
@@ -155,12 +140,17 @@ impl SpaceTradersClient {
             .header("Authorization", format!("Bearer {}", self.token))
             .send()?;
 
+        // let status = response.status();
+        // let text = response.text()?; // Lies den Body als rohen Text
+        // println!("DEBUG API Response: {}", text); // Schau dir an, was wirklich ankommt
+
+        // let body: ShipyardResponse = serde_json::from_str(&text)?;
+
         let status = response.status();
         let body = response.json::<ShipyardResponse>()?;
 
         if let Some(data) = body.data {
-            save_shipyard(system_symbol, data)?;
-            Ok(())
+            Ok(data)
         } else if let Some(err) = body.error {
             anyhow::bail!("API Fehler {}: {}", err.code, err.message)
         } else {
@@ -268,7 +258,6 @@ impl SpaceTradersClient {
             .get(url)
             .header("Authorization", format!("Bearer {}", self.token))
             .send()?;
-
         let status = response.status();
         let body = response.json::<ShipResponse>()?;
 
@@ -279,46 +268,6 @@ impl SpaceTradersClient {
         } else {
             anyhow::bail!("[!] Unbekanntes Antwortformat bei Status {}", status)
         }
-    }
-
-    pub fn update_last_ship_symbol(&mut self) -> Result<()> {
-        if let Some(first) = self.ships.as_ref().and_then(|c| c.first()) {
-            self.update_state(StateUpdate::LastShipSymbol(first.symbol.clone()))?;
-        }
-        Ok(())
-    }
-
-    pub fn update_state_contract_id(&mut self) -> Result<()> {
-        if let Some(first) = self.contracts.as_ref().and_then(|c| c.first()) {
-            self.update_state(StateUpdate::LastContractId(first.id.clone()))?;
-        }
-        Ok(())
-    }
-
-    pub fn update_state_waypoint_symbol(&mut self, symbol: String) -> Result<()> {
-        self.update_state(StateUpdate::LastWaypointSymbol(symbol))?;
-        Ok(())
-    }
-
-    pub fn update_state(&mut self, update: StateUpdate) -> Result<()> {
-        let mut state: LocalState = self.load_state();
-
-        match update {
-            StateUpdate::LastContractId(id) => {
-                state.last_contract_id = Some(id);
-                self.save_state(&state)?;
-            }
-            StateUpdate::LastShipSymbol(symbol) => {
-                state.last_ship_symbol = Some(symbol);
-                self.save_state(&state)?;
-            }
-            StateUpdate::LastWaypointSymbol(symbol) => {
-                state.last_waypoint_symbol = Some(symbol);
-                self.save_state(&state)?;
-            }
-        }
-
-        Ok(())
     }
 
     pub fn fetch_shipyards_in_system(&self, system_symbol: String) -> Result<Vec<WaypointData>> {
@@ -336,6 +285,81 @@ impl SpaceTradersClient {
 
         if let Some(data) = body.data {
             Ok(data)
+        } else if let Some(err) = body.error {
+            anyhow::bail!("API Fehler {}: {}", err.code, err.message)
+        } else {
+            anyhow::bail!("[!] Unbekanntes Antwortformat bei Status {}", status)
+        }
+    }
+
+    pub fn navigate_ship(
+        &self,
+        destination_symbol: String,
+        ship_symbol: String,
+    ) -> Result<ShipNavigation> {
+        let path = format!("my/ships/{}/navigate", ship_symbol);
+        let url = format!("{}/{}", HOST_URL, path);
+        let body = PurchaseRequest {
+            waypoint_symbol: destination_symbol,
+        };
+
+        let response = self
+            .client
+            .post(url)
+            .header("Content-Type", "application/json")
+            .header("Authorization", format!("Bearer {}", self.token))
+            .json(&body)
+            .send()?;
+
+        let status = response.status();
+        let body = response.json::<SpaceTradersResponse<NavData>>()?;
+
+        if let Some(data) = body.data {
+            Ok(data.nav)
+        } else if let Some(err) = body.error {
+            anyhow::bail!("API Fehler {}: {}", err.code, err.message)
+        } else {
+            anyhow::bail!("[!] Unbekanntes Antwortformat bei Status {}", status)
+        }
+    }
+
+    pub fn orbit_ship(&self, ship_symbol: String) -> Result<ShipNavigation> {
+        let path = format!("my/ships/{}/orbit", ship_symbol);
+        let url = format!("{}/{}", HOST_URL, path);
+
+        let response = self
+            .client
+            .post(url)
+            .header("Authorization", format!("Bearer {}", self.token))
+            .send()?;
+
+        let status = response.status();
+        let body = response.json::<SpaceTradersResponse<NavData>>()?;
+
+        if let Some(data) = body.data {
+            Ok(data.nav)
+        } else if let Some(err) = body.error {
+            anyhow::bail!("API Fehler {}: {}", err.code, err.message)
+        } else {
+            anyhow::bail!("[!] Unbekanntes Antwortformat bei Status {}", status)
+        }
+    }
+
+    pub fn dock_ship(&self, ship_symbol: String) -> Result<ShipNavigation> {
+        let path = format!("my/ships/{}/dock", ship_symbol);
+        let url = format!("{}/{}", HOST_URL, path);
+
+        let response = self
+            .client
+            .post(url)
+            .header("Authorization", format!("Bearer {}", self.token))
+            .send()?;
+
+        let status = response.status();
+        let body = response.json::<SpaceTradersResponse<NavData>>()?;
+
+        if let Some(data) = body.data {
+            Ok(data.nav)
         } else if let Some(err) = body.error {
             anyhow::bail!("API Fehler {}: {}", err.code, err.message)
         } else {
